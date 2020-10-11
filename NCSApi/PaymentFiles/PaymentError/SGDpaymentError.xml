@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<TransactionResponse version="0">
+  <PaymentDate>2019-08-16T16:25:08.703</PaymentDate>
+  <CustomsCode>01TC</CustomsCode>
+  <DeclarantCode>C4664RC1447571</DeclarantCode>
+  <SadAsmt>
+    <SADAssessmentSerial>A</SADAssessmentSerial>
+    <SADAssessmentNumber>103362</SADAssessmentNumber>
+    <SADYear>2019</SADYear>
+  </SadAsmt>
+  <TransactionStatus>Error</TransactionStatus>
+  <Info>
+    <Message errorCode="508">Message signature invalid Payment</Message>
+  </Info>
+</TransactionResponse>

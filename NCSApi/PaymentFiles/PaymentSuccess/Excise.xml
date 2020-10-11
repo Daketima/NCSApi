@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ePayExciseTransactionResponse version="0">
+	<CustomsCode>05EN</CustomsCode>
+	<CompanyCode>RC680933</CompanyCode>
+	<Asmt>
+		<AssessmentSerial>Q</AssessmentSerial>
+		<AssessmentNumber>37</AssessmentNumber>
+		<Year>2020</Year>
+	</Asmt>
+	<TransactionStatus>Ok</TransactionStatus>
+	<Info>
+		<Message>Operation completed successfully, Excise was paid</Message>
+	</Info>
+</ePayExciseTransactionResponse>

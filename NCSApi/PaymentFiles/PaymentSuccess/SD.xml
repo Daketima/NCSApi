@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TransactionResponse version="0">
+	<CustomsCode>01MC</CustomsCode>
+	<DeclarantCode>RC889140</DeclarantCode>
+	<SadAsmt>
+		<SADAssessmentSerial>K</SADAssessmentSerial>
+		<SADAssessmentNumber>73</SADAssessmentNumber>
+		<SADYear>2020</SADYear>
+	</SadAsmt>
+	<TransactionStatus>Ok</TransactionStatus>
+	<Info>
+		<Message>Operation completed successfully, SGD was paid</Message>
+	</Info>
+</TransactionResponse>

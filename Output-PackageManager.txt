@@ -1,0 +1,36 @@
+﻿Restoring packages for C:\Users\TAJ174\source\repos\NCSApi\NCSApi\NCSApi.csproj...
+  GET https://api.nuget.org/v3-flatcontainer/swashbuckle.aspnetcore/index.json
+  OK https://api.nuget.org/v3-flatcontainer/swashbuckle.aspnetcore/index.json 216ms
+  GET https://api.nuget.org/v3-flatcontainer/swashbuckle.aspnetcore/5.6.2/swashbuckle.aspnetcore.5.6.2.nupkg
+  OK https://api.nuget.org/v3-flatcontainer/swashbuckle.aspnetcore/5.6.2/swashbuckle.aspnetcore.5.6.2.nupkg 117ms
+  GET https://api.nuget.org/v3-flatcontainer/swashbuckle.aspnetcore.swagger/index.json
+  GET https://api.nuget.org/v3-flatcontainer/swashbuckle.aspnetcore.swaggergen/index.json
+  OK https://api.nuget.org/v3-flatcontainer/swashbuckle.aspnetcore.swagger/index.json 222ms
+  GET https://api.nuget.org/v3-flatcontainer/swashbuckle.aspnetcore.swagger/5.6.2/swashbuckle.aspnetcore.swagger.5.6.2.nupkg
+  GET https://api.nuget.org/v3-flatcontainer/swashbuckle.aspnetcore.swaggerui/index.json
+  OK https://api.nuget.org/v3-flatcontainer/swashbuckle.aspnetcore.swagger/5.6.2/swashbuckle.aspnetcore.swagger.5.6.2.nupkg 117ms
+  OK https://api.nuget.org/v3-flatcontainer/swashbuckle.aspnetcore.swaggergen/index.json 571ms
+  GET https://api.nuget.org/v3-flatcontainer/swashbuckle.aspnetcore.swaggergen/5.6.2/swashbuckle.aspnetcore.swaggergen.5.6.2.nupkg
+  OK https://api.nuget.org/v3-flatcontainer/swashbuckle.aspnetcore.swaggerui/index.json 578ms
+  GET https://api.nuget.org/v3-flatcontainer/swashbuckle.aspnetcore.swaggerui/5.6.2/swashbuckle.aspnetcore.swaggerui.5.6.2.nupkg
+  OK https://api.nuget.org/v3-flatcontainer/swashbuckle.aspnetcore.swaggergen/5.6.2/swashbuckle.aspnetcore.swaggergen.5.6.2.nupkg 119ms
+  OK https://api.nuget.org/v3-flatcontainer/swashbuckle.aspnetcore.swaggerui/5.6.2/swashbuckle.aspnetcore.swaggerui.5.6.2.nupkg 117ms
+Installing Swashbuckle.AspNetCore.SwaggerUI 5.6.2.
+Installing Swashbuckle.AspNetCore.SwaggerGen 5.6.2.
+Installing Swashbuckle.AspNetCore.Swagger 5.6.2.
+Installing Swashbuckle.AspNetCore 5.6.2.
+Installing NuGet package Swashbuckle.AspNetCore 5.6.2.
+Committing restore...
+Generating MSBuild file C:\Users\TAJ174\source\repos\NCSApi\NCSApi\obj\NCSApi.csproj.nuget.g.props.
+Generating MSBuild file C:\Users\TAJ174\source\repos\NCSApi\NCSApi\obj\NCSApi.csproj.nuget.g.targets.
+Writing assets file to disk. Path: C:\Users\TAJ174\source\repos\NCSApi\NCSApi\obj\project.assets.json
+Successfully installed 'Microsoft.Extensions.ApiDescription.Server 3.0.0' to NCSApi
+Successfully installed 'Microsoft.OpenApi 1.2.3' to NCSApi
+Successfully installed 'Swashbuckle.AspNetCore 5.6.2' to NCSApi
+Successfully installed 'Swashbuckle.AspNetCore.Swagger 5.6.2' to NCSApi
+Successfully installed 'Swashbuckle.AspNetCore.SwaggerGen 5.6.2' to NCSApi
+Successfully installed 'Swashbuckle.AspNetCore.SwaggerUI 5.6.2' to NCSApi
+Executing nuget actions took 24.74 sec
+Time Elapsed: 00:00:32.4965353
+========== Finished ==========
+

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ePaymentConfirmation version="0">
+    <PaymentDate>{Payment Date}</PaymentDate>
+    <CustomsCode>{Customer Code}</CustomsCode>
+    <DeclarantCode>{Declarant Code}</DeclarantCode>
+    <BankCode>{Bank Code}</BankCode>
+    <SadAsmt>
+        <SADAssessmentSerial>{Serial}</SADAssessmentSerial>
+        <SADAssessmentNumber>{Number}</SADAssessmentNumber>
+        <SADYear>{Year}</SADYear>
+    </SadAsmt>
+    <Payment>
+        <MeansOfPayment>{Means Of Payment}</MeansOfPayment>
+        <Reference>{Reference}</Reference>
+        <Amount>{Amount}</Amount>
+    </Payment>
+    <TotalAmountToBePaid>{Total Amount}</TotalAmountToBePaid>
+</ePaymentConfirmation>

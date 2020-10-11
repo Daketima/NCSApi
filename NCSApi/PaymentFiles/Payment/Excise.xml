@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<eExcisePaymentConfirmation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" version="0">
+  <PaymentDate>{Payment Date}</PaymentDate>
+  <CustomsCode>{Customer Code}</CustomsCode>
+  <CompanyCode>{Company Code}</CompanyCode>
+  <BankCode>{Bank Code}</BankCode>
+  <Asmt>
+    <AssessmentSerial>{Serial}</AssessmentSerial>
+    <AssessmentNumber>{Number}</AssessmentNumber>
+    <Year>{Year}</Year>
+  </Asmt>
+  <Payment>
+    <MeansOfPayment>{Means of Payment}</MeansOfPayment>
+    <Reference>{Reference}</Reference>
+    <Amount>{Amount}</Amount>
+  </Payment>
+  <TotalAmountToBePaid>{Total Amount}</TotalAmountToBePaid>
+</eExcisePaymentConfirmation>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ePayExciseTransactionResponse version="0">
+	<CustomsCode>05EN</CustomsCode>
+	<CompanyCode/>
+	<Asmt>
+		<AssessmentSerial>Q</AssessmentSerial>
+		<AssessmentNumber>37</AssessmentNumber>
+		<Year>2020</Year>
+	</Asmt>
+	<TransactionStatus>Error</TransactionStatus>
+	<Info>
+		<Message errorCode="216">Declaration is already paid</Message>
+	</Info>
+</ePayExciseTransactionResponse>
