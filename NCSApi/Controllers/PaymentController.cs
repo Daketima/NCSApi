@@ -36,12 +36,12 @@ namespace NCSApi.Controllers
         readonly DutyConfig _dutyConfig;
         readonly CustomContext _context;
         Random _random = new Random();
-       
+
 
 
         public PaymentController(ICustomDutyClient client, DutyConfig dutyConfig, CustomContext context)
         {
-         
+
             _client = client;
             _dutyConfig = dutyConfig;
             _context = context;
@@ -217,6 +217,53 @@ namespace NCSApi.Controllers
 
         }
 
+        [HttpGet]
+        [Route("Reports")]
+        public async Task<IActionResult> GetPayment()
+        {
+            try
+            {
+                List<PaymentStatus> paymentStatuses = await _context.PaymentStatus.ToListAsync();
+                if (paymentStatuses.Any())
+                {
+                    //// Payment getPaymentLog = await _context.Payment.Where(x => x.AssessmentId == assessmentId.ToString()).FirstOrDefaultAsync();
+                    //paymentStatuses.StatusId = (int)TransactionStatus.Accepted;
+                    //_context.Update(paymentStatuses);
+                    //await _context.SaveChangesAsync();
+
+                    return Ok(new { status = HttpStatusCode.OK, Message = "Request Successful", Data = paymentStatuses });
+                }
+                return NotFound(new { status = HttpStatusCode.NotFound, Message = "No payment status found" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { status = HttpStatusCode.InternalServerError, Message = "An error occured", data = ex });
+            }
+        }
+
+        [HttpGet]
+        [Route("Payment/log/{Id}")]
+        public async Task<IActionResult> ThisPaymentLog(Guid Id)
+        {
+            try
+            {
+                PaymentLog getAss = await _context.Payment.FindAsync(Id);
+                if (getAss != null)
+                {
+                    getAss.StatusId = (int)TransactionStatus.Declined;
+                    _context.Update(getAss);
+                    await _context.SaveChangesAsync();
+
+                    return Ok(new { status = HttpStatusCode.OK, Message = "Payment declined" });
+                }
+                return NotFound(new { status = HttpStatusCode.NotFound, Message = "Payment not found", data = "Resource not found" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { status = HttpStatusCode.InternalServerError, Message = "An error occured", data = ex });
+            }
+        }
+
         private async Task<bool> CreditSuspense(string Amount, string SourceAccount, string RequestId)
         {
             bool credited = false;
@@ -265,7 +312,6 @@ namespace NCSApi.Controllers
 
                 return credited;
             }
-
             return credited;
         }
 
@@ -300,7 +346,7 @@ namespace NCSApi.Controllers
                           .Replace("{Serial}", Assessment.AssessmentSerial)
                           .Replace("{Number}", Assessment.AssessmentNumber)
                           .Replace("{Year}", Assessment.Year)
-                         // .Replace("{Means Of Payment}", "In-Branch")
+                          // .Replace("{Means Of Payment}", "In-Branch")
                           .Replace("{Reference}", paymentLog.PaymentReference)
                           .Replace("{Amount}", paymentLog.Amount)
                           .Replace("{Total Amount}", Assessment.TotalAmountToBePaid);

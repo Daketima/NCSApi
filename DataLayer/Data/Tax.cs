@@ -13,6 +13,8 @@ namespace DataLayer.Data
 
          public Guid AssessmentId { get; set; }
 
+         public DateTime DateCreated { get; set; }
+
          public virtual Assessment Assessment {get; set;}
 
     }
