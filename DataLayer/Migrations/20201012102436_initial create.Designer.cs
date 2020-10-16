@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataLayer.Migrations
 {
     [DbContext(typeof(CustomContext))]
-    [Migration("20201006112306_initialmigrations")]
-    partial class initialmigrations
+    [Migration("20201012102436_initial create")]
+    partial class initialcreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,11 +21,23 @@ namespace DataLayer.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("DataLayer.Data.AssessmentNotification", b =>
+            modelBuilder.Entity("DataLayer.Data.Assessment", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AssessmentDate")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AssessmentNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AssessmentSerial")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("AssessmentTypeId")
+                        .HasColumnType("int");
 
                     b.Property<string>("BankBranchCode")
                         .HasColumnType("nvarchar(max)");
@@ -42,6 +54,9 @@ namespace DataLayer.Migrations
                     b.Property<string>("CustomsCode")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("DeclarantCode")
                         .HasColumnType("nvarchar(max)");
 
@@ -51,16 +66,7 @@ namespace DataLayer.Migrations
                     b.Property<string>("FormMNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("SADAssessmentDate")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SADAssessmentNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SADAssessmentSerial")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SADYear")
+                    b.Property<string>("PassportNumber")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TotalAmountToBePaid")
@@ -69,44 +75,29 @@ namespace DataLayer.Migrations
                     b.Property<string>("Version")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Year")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
-                    b.ToTable("AssessmentNotification");
+                    b.HasIndex("AssessmentTypeId");
+
+                    b.ToTable("Assessment");
                 });
 
-            modelBuilder.Entity("DataLayer.Data.ConfirmedNCSTransaction", b =>
+            modelBuilder.Entity("DataLayer.Data.AssessmentType", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("CustomsCode")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DeclarantCode")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Message")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SADAssessmentNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SADAssessmentSerial")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SADYear")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Status")
+                    b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("confirmTransaction");
+                    b.ToTable("AssessmentType");
                 });
 
             modelBuilder.Entity("DataLayer.Data.LOV", b =>
@@ -154,9 +145,6 @@ namespace DataLayer.Migrations
                     b.Property<int>("TransactionStatusId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TypeId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("PaymentTypeId");
@@ -166,19 +154,50 @@ namespace DataLayer.Migrations
                     b.ToTable("Payment");
                 });
 
-            modelBuilder.Entity("DataLayer.Data.PaymentType", b =>
+            modelBuilder.Entity("DataLayer.Data.PaymentStatus", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("AssessmentNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AssessmentSerial")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CompanyCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CustomsCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeclarantCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ErrorCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Message")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("PaymentLogId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Year")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("PaymentType");
+                    b.HasIndex("PaymentLogId");
+
+                    b.ToTable("PaymentStatus");
                 });
 
             modelBuilder.Entity("DataLayer.Data.Tax", b =>
@@ -190,9 +209,6 @@ namespace DataLayer.Migrations
                     b.Property<Guid>("AssessmentId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("AssessmentNotificationId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("TaxAmount")
                         .HasColumnType("nvarchar(max)");
 
@@ -201,7 +217,7 @@ namespace DataLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AssessmentNotificationId");
+                    b.HasIndex("AssessmentId");
 
                     b.ToTable("Tax");
                 });
@@ -212,7 +228,7 @@ namespace DataLayer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("AssessmentNotificationId")
+                    b.Property<Guid>("AssessmentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("DateCreated")
@@ -226,14 +242,23 @@ namespace DataLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AssessmentNotificationId");
+                    b.HasIndex("AssessmentId");
 
                     b.ToTable("XMLArchive");
                 });
 
+            modelBuilder.Entity("DataLayer.Data.Assessment", b =>
+                {
+                    b.HasOne("DataLayer.Data.AssessmentType", "AssessmentType")
+                        .WithMany()
+                        .HasForeignKey("AssessmentTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("DataLayer.Data.PaymentLog", b =>
                 {
-                    b.HasOne("DataLayer.Data.PaymentType", "PaymentType")
+                    b.HasOne("DataLayer.Data.AssessmentType", "PaymentType")
                         .WithMany()
                         .HasForeignKey("PaymentTypeId");
 
@@ -244,18 +269,29 @@ namespace DataLayer.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("DataLayer.Data.PaymentStatus", b =>
+                {
+                    b.HasOne("DataLayer.Data.PaymentLog", "PaymentLog")
+                        .WithMany()
+                        .HasForeignKey("PaymentLogId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("DataLayer.Data.Tax", b =>
                 {
-                    b.HasOne("DataLayer.Data.AssessmentNotification", "AssessmentNotification")
+                    b.HasOne("DataLayer.Data.Assessment", "Assessment")
                         .WithMany()
-                        .HasForeignKey("AssessmentNotificationId");
+                        .HasForeignKey("AssessmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("DataLayer.Data.XMLArchive", b =>
                 {
-                    b.HasOne("DataLayer.Data.AssessmentNotification", "AssessmentNotification")
+                    b.HasOne("DataLayer.Data.Assessment", "Assessment")
                         .WithMany()
-                        .HasForeignKey("AssessmentNotificationId")
+                        .HasForeignKey("AssessmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

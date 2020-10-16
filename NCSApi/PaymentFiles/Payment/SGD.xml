@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <ePaymentConfirmation version="0">
     <PaymentDate>{Payment Date}</PaymentDate>
-    <CustomsCode>{Customer Code}</CustomsCode>
+    <CustomsCode>{Customs Code}</CustomsCode>
     <DeclarantCode>{Declarant Code}</DeclarantCode>
     <BankCode>{Bank Code}</BankCode>
     <SadAsmt>
@@ -10,7 +10,7 @@
         <SADYear>{Year}</SADYear>
     </SadAsmt>
     <Payment>
-        <MeansOfPayment>{Means Of Payment}</MeansOfPayment>
+        <MeansOfPayment>11</MeansOfPayment>
         <Reference>{Reference}</Reference>
         <Amount>{Amount}</Amount>
     </Payment>

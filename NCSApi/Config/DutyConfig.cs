@@ -23,17 +23,21 @@ namespace NCSApi.Config
 
         public string TillAccount { get; set; }
 
-        public string ExciseReadDirectory { get; set; }
+        //public string ExciseReadDirectory { get; set; }
 
-        public string ExciseResponseDirectory { get; set; }
+        //public string ExciseResponseDirectory { get; set; }
 
-        public string ErrorResponseDirectory { get; set; }
+        //public string ErrorResponseDirectory { get; set; }
+
+        public string ExcisePaymentPath { get; set; }
+
+        public string ExciseResponsePath { get; set; }
     }
 
     public enum TransactionStatus
     {
         Initiated = 1,
-        Authorizes = 2,
+        Authorized = 2,
         Approved= 3,
         Completed = 4,
         Declined = 5,

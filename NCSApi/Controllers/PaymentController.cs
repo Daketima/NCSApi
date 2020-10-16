@@ -36,12 +36,12 @@ namespace NCSApi.Controllers
         readonly DutyConfig _dutyConfig;
         readonly CustomContext _context;
         Random _random = new Random();
-        readonly IOptions<Settings> _settings;
+       
 
 
-        public PaymentController(ICustomDutyClient client, DutyConfig dutyConfig, CustomContext context, IOptions<Settings> settings)
+        public PaymentController(ICustomDutyClient client, DutyConfig dutyConfig, CustomContext context)
         {
-            _settings = settings;
+         
             _client = client;
             _dutyConfig = dutyConfig;
             _context = context;
@@ -87,15 +87,15 @@ namespace NCSApi.Controllers
                     if (suspenseIsCredited)
                     {
                         string xmlBuilder = PaymentTypeFinder(assessmentType, getPaymentLog, getNotificaton);
-
+                        string xmlSavePath = assessmentType == "Excise" ? _dutyConfig.ExcisePaymentPath : @"C:\tosser\inout\in\";
                         XmlDocument xDoc = new XmlDocument();
                         xDoc.LoadXml(xmlBuilder);
                         //xDoc.Save(Path.Combine(@"C:\tosser\inout\out\", $"{DateTime.Now.Ticks}.xml"));
-                        xDoc.Save(Path.Combine(@"C:\tosser\inout\in\", $"{assessmentType}_{DateTime.Now.Ticks}.xml"));
+                        xDoc.Save(Path.Combine(xmlSavePath, $"{assessmentType}_{DateTime.Now.Ticks}.xml"));
 
                         //bool _responseReceived = false;                      
 
-                        PaymentResponseFinder(getPaymentLog, out bool _responseReceived, out string Message);
+                        PaymentResponseFinder(getPaymentLog, out bool _responseReceived, out string Message, assessmentType);
                         if (_responseReceived)
                         {
                             return Ok(new { Status = HttpStatusCode.OK, Message = $"Transaction completed: NCS Message - {Message}" });
@@ -106,6 +106,7 @@ namespace NCSApi.Controllers
 
                             if (errConfirm)
                             {
+                                cleaner.DeleteFile(@"C:\tosser\inout\err");
                                 return Ok(new { Status = HttpStatusCode.OK, Message = ErrorMessage });
                             }
                         }
@@ -274,13 +275,14 @@ namespace NCSApi.Controllers
             if (AssessmentType.Equals("Excise"))
             {
 
-                xmlBuilder = xmlBuilder.Replace("{Payment Date}", DateTime.Now.ToString("dd/MM/yyyy"))
-                          .Replace("{Customer Code}", Assessment?.CustomsCode ?? "Not Available")
-                          .Replace("{Company Code}", Assessment.CompanyCode ?? "Not Available").Replace("{Bank Code}", Assessment.BankCode)
+                xmlBuilder = xmlBuilder.Replace("{Payment Date}", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"))
+                          .Replace("{Customs Code}", Assessment?.CustomsCode ?? "Not Available")
+                          .Replace("{Company Code}", Assessment.CompanyCode ?? "Not Available")
+                          .Replace("{Bank Code}", Assessment.BankCode)
                           .Replace("{Serial}", Assessment.AssessmentSerial)
                           .Replace("{Number}", Assessment.AssessmentNumber)
                           .Replace("{Year}", Assessment.Year)
-                          .Replace("{Means of Payment}", "In-Branch")
+                          //.Replace("{Means of Payment}", "In-Branch")
                           .Replace("{Reference}", paymentLog.PaymentReference)
                           .Replace("{Amount}", paymentLog.Amount)
                           .Replace("{Total Amount}", Assessment.TotalAmountToBePaid);
@@ -291,14 +293,14 @@ namespace NCSApi.Controllers
             {
 
                 xmlBuilder = xmlBuilder.Replace("{Document}", AssessmentType)
-                          .Replace("{Payment Date}", DateTime.Now.ToString("dd/MM/yyyy"))
-                          .Replace("{Customer Code}", Assessment?.CustomsCode ?? "Not Available")
+                          .Replace("{Payment Date}", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.fffffffK"))
+                          .Replace("{Customs Code}", Assessment?.CustomsCode ?? "Not Available")
                           .Replace("{Declarant Code}", Assessment.CompanyCode ?? "Not Available")
                           .Replace("{Bank Code}", Assessment.BankCode)
                           .Replace("{Serial}", Assessment.AssessmentSerial)
                           .Replace("{Number}", Assessment.AssessmentNumber)
                           .Replace("{Year}", Assessment.Year)
-                          .Replace("{Means Of Payment}", "In-Branch")
+                         // .Replace("{Means Of Payment}", "In-Branch")
                           .Replace("{Reference}", paymentLog.PaymentReference)
                           .Replace("{Amount}", paymentLog.Amount)
                           .Replace("{Total Amount}", Assessment.TotalAmountToBePaid);
@@ -308,14 +310,14 @@ namespace NCSApi.Controllers
             if (AssessmentType.Equals("SGD"))
             {
 
-                xmlBuilder = xmlBuilder.Replace("{Payment Date}", DateTime.Now.ToString("dd/MM/yyyy"))
-                          .Replace("{Customer Code}", Assessment?.CustomsCode)
+                xmlBuilder = xmlBuilder.Replace("{Payment Date}", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.fffffffK"))
+                          .Replace("{Customs Code}", Assessment?.CustomsCode)
                           .Replace("{Declarant Code}", Assessment.CompanyCode)
                           .Replace("{Bank Code}", Assessment.BankCode)
                           .Replace("{Serial}", Assessment.AssessmentSerial)
                           .Replace("{Number}", Assessment.AssessmentNumber)
                           .Replace("{Year}", Assessment.Year)
-                          .Replace("{Means of Payment}", "In-Branch")
+                          //.Replace("{Means Of Payment}", "In-Branch")
                           .Replace("{Reference}", paymentLog.PaymentReference)
                           .Replace("{Amount}", paymentLog.Amount)
                           .Replace("{Total Amount}", Assessment.TotalAmountToBePaid);
@@ -326,16 +328,18 @@ namespace NCSApi.Controllers
 
         }
 
-        void PaymentResponseFinder(PaymentLog PaymentLog, out bool ResponseReceived, out string Message)
+        void PaymentResponseFinder(PaymentLog PaymentLog, out bool ResponseReceived, out string Message, string assessmentType)
         {
-            int retry = 5;
+            int retry = 20;
             PaymentStatus paymentStatus = null;
             ResponseReceived = false;
             Message = string.Empty;
-            int counter = -4;
+            int counter = -20;
+            string responsePath = assessmentType == "Excise" ? _dutyConfig.ExciseResponsePath : @"C:\tosser\inout\eresponse";
+
             do
             {
-                var all = Directory.GetFiles(@"C:\tosser\inout\eresponse");
+                var all = Directory.GetFiles(responsePath);
                 if (all.Any())
                 {
                     foreach (string filename in all)
@@ -479,8 +483,8 @@ namespace NCSApi.Controllers
         {
             ErrorIsReceived = false;
             var getPaymentLog = _context.Payment.Find(paymentId);
-            int retry = 5;
-            int counter = -4;
+            int retry = 20;
+            int counter = -20;
             PaymentStatus paymentStatus = null;
             Message = string.Empty;
 
@@ -562,6 +566,28 @@ namespace NCSApi.Controllers
             }
             while (retry != 0);
 
+        }
+
+        class cleaner
+        {
+            public static void DeleteFile(string folderPath)
+            {
+                DirectoryInfo all = new DirectoryInfo(folderPath);
+
+
+                foreach (FileInfo file in all.GetFiles())
+                {
+                    System.GC.Collect();
+                    System.GC.WaitForPendingFinalizers();
+                    file.IsReadOnly = false;
+                    file.Delete();
+                }
+
+                //    all.Delete(true);
+                //    string pathString2 = @"C:\tosser\inout\callback";
+                //System.IO.Directory.CreateDirectory(pathString2) ;
+
+            }
         }
 
 

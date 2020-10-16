@@ -26,11 +26,6 @@ namespace CustomDutyJob
             CustomContext _appContext = new CustomContext();
             string[] tossesFile = Directory.GetFiles(@"C:\tosser\inout\callback");
 
-            Thread excise = new Thread(new ThreadStart(ProcessExcise));
-            Thread sd = new Thread(new ThreadStart(ProcessSD));
-            excise.Start();
-            sd.Start();
-
             if (tossesFile.Any())
             {
                 foreach (var filename in tossesFile)
@@ -39,100 +34,60 @@ namespace CustomDutyJob
                     WriteLine($"Reading file...{filename}");
                     string rawXml = File.ReadAllText(filename);
 
-                    XmlDocument xmlDoc = new XmlDocument();
-
-                    FileStream fs = new FileStream(filename, FileMode.Open, FileAccess.Read);
-                    xmlDoc.Load(fs);
-
-                    var xmlTaxesNodeList = xmlDoc.GetElementsByTagName("Taxes");
-
-                    var ser = new XmlSerializer(typeof(eAssessmentNotice));
-                    //Real xml stream
-                    using (TextReader reader = new StringReader(xmlDoc.InnerXml))
-                    {
-                        // Serialize the xml document
-
-                        eAssessmentNotice newAss = (eAssessmentNotice)ser.Deserialize(reader);
-
-                        string serr = JsonConvert.SerializeObject(newAss);
-                        //AssessmentNotification newAss2 
-
-                        Assessment newAssNotify = JsonConvert.DeserializeObject<Assessment>(serr);
-
-                        newAssNotify.AssessmentTypeId = (int)AssessmentType.SGD;
-                        _appContext.Assessment.Add(newAssNotify);
-                        _appContext.SaveChanges();
-
-                        SaveTaxes(rawXml, newAssNotify.Id, "eAssessmentNotice");
-                        SaveRawXML(newAssNotify.Id, rawXml, filename);
-                        SaveToArchive(filename);
-                    }
-                    fs.Close();
-                    fs.Dispose();
-                    cleaner.DeleteFile(@"C:\tosser\inout\callback");                   
+                    string _whatToOppress = rawXml.Contains("eExciseAssessmentNotice") ? ProcessExcise(filename) : rawXml.Contains("eAssessmentNotice") ? ProcessSDG(filename) : ProcessSD(filename);
                 }
-            }
+                WriteLine("Empting Callback folder, please wait ...");
+                
+                Thread.Sleep(5);
+                cleaner.DeleteFile(@"C:\tosser\inout\callback");
 
-            //System.GC.Collect();
-            //System.GC.WaitForPendingFinalizers();
-            //Thread.Sleep(1000); 
-            
-            excise.Join();
-            sd.Join();
-           
+                WriteLine("Callback Folder emptied");
+            }
             ReadLine();
         }
 
 
-        static void ProcessExcise()
+        static string ProcessExcise(string filename)
         {
-            CustomContext _appContext = new CustomContext();
-            string[] tossesFile = Directory.GetFiles(@"C:\tosser\inout\excise");
+            WriteLine($"Reading file...{filename}");
+            string rawXml = File.ReadAllText(filename);
 
-            if (tossesFile.Any())
+            XmlDocument xmlDoc = new XmlDocument();
+
+            FileStream fs = new FileStream(filename, FileMode.Open, FileAccess.Read);
+            xmlDoc.Load(fs);
+
+            var xmlTaxesNodeList = xmlDoc.GetElementsByTagName("Taxes");
+
+            var ser = new XmlSerializer(typeof(ExciseAssessment));
+            //Real xml stream
+            using (TextReader reader = new StringReader(xmlDoc.InnerXml))
             {
-                foreach (var filename in tossesFile)
+                // Serialize the xml document
+
+                ExciseAssessment newAss = (ExciseAssessment)ser.Deserialize(reader);
+
+                string serr = JsonConvert.SerializeObject(newAss);
+                //AssessmentNotification newAss2 
+
+                Assessment newAssNotify = JsonConvert.DeserializeObject<Assessment>(serr);
+
+                using (CustomContext _context = new CustomContext())
                 {
-
-                    WriteLine($"Reading file...{filename}");
-                    string rawXml = File.ReadAllText(filename);
-
-                    XmlDocument xmlDoc = new XmlDocument();
-
-                    FileStream fs = new FileStream(filename, FileMode.Open, FileAccess.Read);
-                    xmlDoc.Load(fs);
-
-                    var xmlTaxesNodeList = xmlDoc.GetElementsByTagName("Taxes");
-
-                    var ser = new XmlSerializer(typeof(ExciseAssessment));
-                    //Real xml stream
-                    using (TextReader reader = new StringReader(xmlDoc.InnerXml))
-                    {
-                        // Serialize the xml document
-
-                        ExciseAssessment newAss = (ExciseAssessment)ser.Deserialize(reader);
-
-                        string serr = JsonConvert.SerializeObject(newAss);
-                        //AssessmentNotification newAss2 
-
-                        Assessment newAssNotify = JsonConvert.DeserializeObject<Assessment>(serr);
-
-                        using (CustomContext _context = new CustomContext())
-                        {
-                            newAssNotify.AssessmentTypeId = (int)AssessmentType.Excise;
-                            _context.Assessment.Add(newAssNotify);
-                            _context.SaveChanges();
-                        }
-
-                        SaveTaxes(rawXml, newAssNotify.Id, "eExciseAssessmentNotice");
-                        SaveRawXML(newAssNotify.Id, rawXml, filename);
-                        SaveToArchive(filename);
-                    }
-                    fs.Close();
-                    fs.Dispose();
-                    cleaner.DeleteFile(@"C:\tosser\inout\excise");
+                    newAssNotify.AssessmentTypeId = (int)AssessmentType.Excise;
+                    newAssNotify.DateCreated = DateTime.Now;
+                    _context.Assessment.Add(newAssNotify);
+                    _context.SaveChanges();
                 }
+
+                SaveTaxes(rawXml, newAssNotify.Id, "eExciseAssessmentNotice");
+                SaveRawXML(newAssNotify.Id, rawXml, filename);
+                SaveToArchive(filename);
             }
+            fs.Close();
+            fs.Dispose();
+           
+            return "Excise Assesment Processed";
         }
 
         enum AssessmentType
@@ -142,56 +97,99 @@ namespace CustomDutyJob
             SGD = 3
         }
 
-        static void ProcessSD()
+        static string ProcessSDG(string filename)
         {
 
-          //  CustomContext _appContext = new CustomContext();
-            string[] tossesFile = Directory.GetFiles(@"C:\tosser\inout\sd");
 
-            if (tossesFile.Any())
+
+            WriteLine($"Reading file...{filename}");
+            string rawXml = File.ReadAllText(filename);
+
+            XmlDocument xmlDoc = new XmlDocument();
+
+            FileStream fs = new FileStream(filename, FileMode.Open, FileAccess.Read);
+            xmlDoc.Load(fs);
+
+            //xmlDoc.LoadXml(RawXML);
+
+            var xmlTaxesNodeList = xmlDoc.GetElementsByTagName("Taxes");
+
+            var ser = new XmlSerializer(typeof(eAssessmentNotice));
+            //Real xml stream
+            using (TextReader reader = new StringReader(xmlDoc.InnerXml))
             {
-                foreach (var filename in tossesFile)
+                // Serialize the xml document
+
+                eAssessmentNotice newAss = (eAssessmentNotice)ser.Deserialize(reader);
+
+                string serr = JsonConvert.SerializeObject(newAss);
+                //AssessmentNotification newAss2 
+
+                Assessment newAssNotify = JsonConvert.DeserializeObject<Assessment>(serr);
+
+                using (CustomContext _contexy = new CustomContext())
                 {
-
-                    WriteLine($"Reading file...{filename}");
-                    string rawXml = File.ReadAllText(filename);
-
-                    XmlDocument xmlDoc = new XmlDocument();
-
-                    FileStream fs = new FileStream(filename, FileMode.Open, FileAccess.Read);
-                    xmlDoc.Load(fs);
-
-                    var xmlTaxesNodeList = xmlDoc.GetElementsByTagName("Taxes");
-
-                    var ser = new XmlSerializer(typeof(SDAssessment));
-                    //Real xml stream
-                    using (TextReader reader = new StringReader(xmlDoc.InnerXml))
-                    {
-                        // Serialize the xml document
-
-                        SDAssessment newAss = (SDAssessment)ser.Deserialize(reader);
-
-                        string serr = JsonConvert.SerializeObject(newAss);
-                        //AssessmentNotification newAss2 
-
-                        Assessment newAssNotify = JsonConvert.DeserializeObject<Assessment>(serr);
-
-                        using (CustomContext _contexy = new CustomContext())
-                        {
-                            newAssNotify.AssessmentTypeId = (int)AssessmentType.SD;
-                            _contexy.Assessment.Add(newAssNotify);
-                            _contexy.SaveChanges();
-                        }
-
-                        SaveTaxes(rawXml, newAssNotify.Id, "sdAssessmentNotice");
-                        SaveRawXML(newAssNotify.Id, rawXml, filename);
-                        SaveToArchive(filename);
-                    }
-                    fs.Close();
-                    fs.Dispose();
-                    cleaner.DeleteFile(@"C:\tosser\inout\sd");
+                    newAssNotify.AssessmentTypeId = (int)AssessmentType.SGD;
+                    newAssNotify.DateCreated = DateTime.Now;
+                    _contexy.Assessment.Add(newAssNotify);
+                    _contexy.SaveChanges();
                 }
+
+                SaveTaxes(rawXml, newAssNotify.Id, "eAssessmentNotice");
+                SaveRawXML(newAssNotify.Id, rawXml, filename);
+                SaveToArchive(filename);
             }
+            fs.Close();
+            fs.Dispose();
+            //cleaner.DeleteFile(filename);
+
+            return "SGD Assessment processes";
+        }
+
+        static string ProcessSD(string filename)
+        {
+
+
+            WriteLine($"Reading file...{filename}");
+            string rawXml = File.ReadAllText(filename);
+
+            XmlDocument xmlDoc = new XmlDocument();
+
+            FileStream fs = new FileStream(filename, FileMode.Open, FileAccess.Read);
+            xmlDoc.Load(fs);
+
+            var xmlTaxesNodeList = xmlDoc.GetElementsByTagName("Taxes");
+
+            var ser = new XmlSerializer(typeof(SDAssessment));
+            //Real xml stream
+            using (TextReader reader = new StringReader(xmlDoc.InnerXml))
+            {
+                // Serialize the xml document
+
+                SDAssessment newAss = (SDAssessment)ser.Deserialize(reader);
+
+                string serr = JsonConvert.SerializeObject(newAss);
+                //AssessmentNotification newAss2 
+
+                Assessment newAssNotify = JsonConvert.DeserializeObject<Assessment>(serr);
+
+                using (CustomContext _context = new CustomContext())
+                {
+                    newAssNotify.AssessmentTypeId = (int)AssessmentType.SD;
+                    newAssNotify.DateCreated = DateTime.Now;
+                    _context.Assessment.Add(newAssNotify);
+                    _context.SaveChanges();
+                }
+
+                SaveTaxes(rawXml, newAssNotify.Id, "sdAssessmentNotice");
+                SaveRawXML(newAssNotify.Id, rawXml, filename);
+                SaveToArchive(filename);
+            }
+            fs.Close();
+            fs.Dispose();
+            // cleaner.DeleteFile(filename);
+
+            return "SD Assesment Processed";
         }
 
 

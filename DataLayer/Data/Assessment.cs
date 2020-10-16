@@ -33,6 +33,8 @@ namespace DataLayer.Data
 		public string BankBranchCode { get; set; }
 		//[XmlElement(ElementName = "FormMNumber")]
 		public string FormMNumber { get; set; }
+
+		public DateTime DateCreated {get; set;}
 		
 		//[XmlElement(ElementName = "Taxes")]
 		//public Tax Taxes { get; set; }

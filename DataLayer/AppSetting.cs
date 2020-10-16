@@ -9,12 +9,16 @@ namespace DataLayer
      { 
          public static string GetConnectionString()
          {
-
-             string root = Directory.GetCurrentDirectory();
+        
             return new ConfigurationBuilder()
-                .AddJsonFile(Path.Combine("C:\\Users\\taj174\\source\\repos\\NCSApi\\NCSApi\\", "appsettings.json"), optional: false)
-                .AddJsonFile(Path.Combine("C:\\Users\\taj174\\source\\repos\\NCSApi\\NCSApi\\", "appsettings.Development.json"), optional: false)
+                .AddJsonFile(Path.Combine(@"C:\DevApp\NCSApi", "appsettings.json"), optional: false)
+                .AddJsonFile(Path.Combine(@"C:\DevApp\NCSApi", "appsettings.Development.json"), optional: false)
                 .Build().GetSection("ConnectionString").GetValue<string>("DefaultConnectionString");
+
+                // return new ConfigurationBuilder()
+                // .AddJsonFile(Path.Combine(@"C:\DevApp\NCSApi", "appsettings.json"), optional: false)
+                // .AddJsonFile(Path.Combine(@"C:\DevApp\NCSApi", "appsettings.Development.json"), optional: false)
+                // .Build().GetSection("ConnectionString").GetValue<string>("DefaultConnectionString");
          }         
     }
 }

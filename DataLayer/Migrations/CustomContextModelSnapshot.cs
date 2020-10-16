@@ -52,6 +52,9 @@ namespace DataLayer.Migrations
                     b.Property<string>("CustomsCode")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("DeclarantCode")
                         .HasColumnType("nvarchar(max)");
 
@@ -93,23 +96,6 @@ namespace DataLayer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AssessmentType");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Excise"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "SD"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "SGD"
-                        });
                 });
 
             modelBuilder.Entity("DataLayer.Data.LOV", b =>
