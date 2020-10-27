@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using NCSApi.Config;
 using NCSApi.Contract;
+using Serilog;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -40,16 +41,16 @@ namespace NCSApi.Controllers
             try
             {
                 Assessment getAss = await _context.Assessment
-                                                      .Include(r => r.AssessmentType)
+                                                     .Include(r => r.AssessmentType)
                                                              .FirstOrDefaultAsync(x => x.Id.Equals(assessmentId));
                 if (getAss != null)
                 {
-                    PaymentLog getPaymentLog = await _context.Payment.Where(x => x.AssessmentId == assessmentId.ToString()).FirstOrDefaultAsync();
+                    PaymentLog getPaymentLog = await _context.Payment.Where(x => x.AssessmentId == getAss.Id.ToString()).FirstOrDefaultAsync();
 
                     if (getPaymentLog == null) return NotFound(new { status = HttpStatusCode.NotFound, Message = $"No payment generated for assesment {assessmentId}" });
 
                     AssessmentResponse response = _mapper.Map<AssessmentResponse>(getAss);
-
+                    Log.Information($"Processstatus id: {getPaymentLog.StatusId} and transactio reference {getPaymentLog.PaymentReference}");
                     return Ok(new
                     {
                         status = HttpStatusCode.OK,
@@ -59,7 +60,9 @@ namespace NCSApi.Controllers
                             Details = response,
                             PaymentReference = getPaymentLog.PaymentReference,
                             ProcessStatus = Enum.GetName(typeof(TransactionStatus), getPaymentLog.StatusId),
-                            TransactionStatus = Enum.GetName(typeof(TransactionStatus), getPaymentLog.TransactionStatusId)
+                            TransactionStatus = Enum.GetName(typeof(TransactionStatus), getPaymentLog.TransactionStatusId),
+                            Comment = getPaymentLog.Comment
+
                         }
                     });
                 }
@@ -77,19 +80,20 @@ namespace NCSApi.Controllers
         [Route("find")]
         public async Task<IActionResult> Post([FromBody] AssessmentRequest model)
         {
-            var assessment = await _context.Assessment.Where(x => x.Year.Equals(model.SADAssessmentYear) && x.AssessmentSerial.Equals(model.SADAssessmentSerial) && x.AssessmentNumber.Equals(model.SADAssessmentNumber)).FirstOrDefaultAsync();
+            var assessment = await _context.Assessment.Where(x => x.Year.Equals(model.SADAssessmentYear) && x.AssessmentSerial.Equals(model.SADAssessmentSerial) && x.AssessmentNumber.Equals(model.SADAssessmentNumber)).ToListAsync();
 
-            if (assessment != null)
+            var currentVerson = assessment.LastOrDefault();
+
+            if (currentVerson != null)
             {
-                AssessmentResponse response = _mapper.Map<AssessmentResponse>(assessment);
-                response.Taxes = await _context.Tax.Where(x => x.AssessmentId.Equals(assessment.Id)).ToListAsync();
+                AssessmentResponse response = _mapper.Map<AssessmentResponse>(currentVerson);
+                response.Taxes = await _context.Tax.Where(x => x.AssessmentId.Equals(currentVerson.Id)).ToListAsync();
 
                 return Ok(new { status = HttpStatusCode.OK, Message = "Request completed", Data = response });
             }
 
             return NotFound(new { status = HttpStatusCode.NotFound, Message = "Resource not found" });
         }
-
 
     }
 }

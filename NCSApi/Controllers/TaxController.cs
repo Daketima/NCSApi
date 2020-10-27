@@ -38,16 +38,21 @@ namespace NCSApi.Controllers
 
         // GET api/<TaxController>/5
         [HttpGet]
-        [Route("Find/byAssessment/{AssessmentId}")]
-        public async Task<IActionResult> FindTaxes(Guid AssessmentId)
+        [Route("Find/byPaymentLog/{PaymentLogId}")]
+        public async Task<IActionResult> FindTaxes(Guid PaymentLogId)
         {
-            try {List<Tax> FindTaxes = await _context.Tax.Where(x => x.AssessmentId.Equals(AssessmentId)).ToListAsync();
-            if (FindTaxes.Any())
+            try
             {
+                PaymentLog getPaymentLog = await _context.Payment.FindAsync(PaymentLogId);
+                if (getPaymentLog == null) return NotFound(new { status = HttpStatusCode.NotFound, Message = "Request Successful", data = new { message = "Payment log not found" } });
 
-                return Ok(new { status = HttpStatusCode.OK, Message = "Request Successful", data = FindTaxes });
+                List<Tax> FindTaxes = await _context.Tax.Where(x => x.AssessmentId.Equals(Guid.Parse(getPaymentLog.AssessmentId))).ToListAsync();
+                if (FindTaxes.Any())
+                {
+                    return Ok(new { status = HttpStatusCode.OK, Message = "Request Successful", data = FindTaxes });
+                }
+                return NotFound(new { status = HttpStatusCode.NotFound, Message = "Request completed", data = new { message = "No tax(es) found for the payment reference" } });
             }
-            return NotFound(new { status = HttpStatusCode.NotFound, Message = "Request completed", data = new { message = "No tax(es) found for the payment reference" } }); }
             catch (Exception ex)
             {
                 return BadRequest(new { status = HttpStatusCode.InternalServerError, Message = "An error occured", data = ex });

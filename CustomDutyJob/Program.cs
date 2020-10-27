@@ -29,10 +29,8 @@ namespace CustomDutyJob
             if (tossesFile.Any())
             {
                 foreach (var filename in tossesFile)
-                {
-
-                    WriteLine($"Reading file...{filename}");
-                    string rawXml = File.ReadAllText(filename);
+                {          
+                    string rawXml = File.ReadAllText(filename);           
 
                     string _whatToOppress = rawXml.Contains("eExciseAssessmentNotice") ? ProcessExcise(filename) : rawXml.Contains("eAssessmentNotice") ? ProcessSDG(filename) : ProcessSD(filename);
                 }
@@ -46,9 +44,8 @@ namespace CustomDutyJob
             ReadLine();
         }
 
-
         static string ProcessExcise(string filename)
-        {
+        {            
             WriteLine($"Reading file...{filename}");
             string rawXml = File.ReadAllText(filename);
 
@@ -80,12 +77,16 @@ namespace CustomDutyJob
                     _context.SaveChanges();
                 }
 
-                SaveTaxes(rawXml, newAssNotify.Id, "eExciseAssessmentNotice");
-                SaveRawXML(newAssNotify.Id, rawXml, filename);
-                SaveToArchive(filename);
-            }
-            fs.Close();
-            fs.Dispose();
+                fs.Close();
+                fs.Dispose();
+
+                SaveTaxes(rawXml, newAssNotify.Id, "eExciseAssessmentNotice");                
+                //SaveToArchive(@"C:\tosser\inout\archive\Excise\Assessment");
+                var startIndex = filename.LastIndexOf('\\');
+                var fileNameCopy = filename.Substring(startIndex + 1);
+                CopyTo(filename, $"C:\\tosser\\inout\\archive\\Excise\\Assessment\\{fileNameCopy}");
+                SaveRawXML(newAssNotify.Id, rawXml, $"C:\\tosser\\inout\\archive\\Excise\\Assessment\\{fileNameCopy}");
+            }           
            
             return "Excise Assesment Processed";
         }
@@ -99,9 +100,6 @@ namespace CustomDutyJob
 
         static string ProcessSDG(string filename)
         {
-
-
-
             WriteLine($"Reading file...{filename}");
             string rawXml = File.ReadAllText(filename);
 
@@ -135,12 +133,19 @@ namespace CustomDutyJob
                     _contexy.SaveChanges();
                 }
 
+                fs.Close();
+                fs.Dispose();
+
                 SaveTaxes(rawXml, newAssNotify.Id, "eAssessmentNotice");
-                SaveRawXML(newAssNotify.Id, rawXml, filename);
-                SaveToArchive(filename);
+               
+                // SaveToArchive(@"C:\tosser\inout\archive\SGD\Assessment");
+                var startIndex = filename.LastIndexOf('\\');
+                var fileNameCopy = filename.Substring(startIndex + 1);
+                CopyTo(filename, $"C:\\tosser\\inout\\archive\\SGD\\Assessment\\{fileNameCopy}"); 
+                SaveRawXML(newAssNotify.Id, rawXml, $"C:\\tosser\\inout\\archive\\SGD\\Assessment\\{fileNameCopy}");
+
             }
-            fs.Close();
-            fs.Dispose();
+           
             //cleaner.DeleteFile(filename);
 
             return "SGD Assessment processes";
@@ -181,48 +186,57 @@ namespace CustomDutyJob
                     _context.SaveChanges();
                 }
 
+                fs.Close();
+                fs.Dispose();
+
                 SaveTaxes(rawXml, newAssNotify.Id, "sdAssessmentNotice");
-                SaveRawXML(newAssNotify.Id, rawXml, filename);
-                SaveToArchive(filename);
-            }
-            fs.Close();
-            fs.Dispose();
+               
+                // SaveToArchive(@"C:\tosser\inout\archive\SD\Assessment");
+                var startIndex = filename.LastIndexOf('\\');
+                var fileNameCopy = filename.Substring(startIndex + 1);
+                CopyTo(filename, $"C:\\tosser\\inout\\archive\\SD\\Assessment\\{fileNameCopy}");
+                SaveRawXML(newAssNotify.Id, rawXml, $"C:\\tosser\\inout\\archive\\SD\\Assessment\\{fileNameCopy}");
+            }          
             // cleaner.DeleteFile(filename);
 
             return "SD Assesment Processed";
         }
 
+        //static void SaveToArchive(string FilePath)
+        //{
+        //    XmlDocument xmlDoc = new XmlDocument();
 
-        static void SaveToArchive(string FilePath)
-        {
-            XmlDocument xmlDoc = new XmlDocument();
+        //    FileStream fs = new FileStream(FilePath, FileMode.Open, FileAccess.Read);
+        //    xmlDoc.Load(fs);
 
-            FileStream fs = new FileStream(FilePath, FileMode.Open, FileAccess.Read);
-            xmlDoc.Load(fs);
+        //    string path = System.IO.Path.GetDirectoryName(@"C:\tosser\inout\archive\Callback");
+        //    string file = System.IO.Path.Combine(path, xmlDoc.InnerXml);
 
-            string path = System.IO.Path.GetDirectoryName(@"C:\tosser\inout\archive\Callback");
-            string file = System.IO.Path.Combine(path, xmlDoc.InnerXml);
+        //    fs.Close();
+        //    fs.Dispose();
 
-            using (TextReader reader = new StringReader(xmlDoc.InnerXml))
-            {
+        //    using (TextReader reader = new StringReader(xmlDoc.InnerXml))
+        //    {
 
-                string targetFile = Path.Combine(Path.GetFileName(FilePath));
-                //if (File.Exists(targetFile)) File.Delete(targetFile);
-                // File.Copy(file, targetFile);
-                // doc.Load(testdata);
-                // xmldoc.Save(path);
+        //        string targetFile = Path.Combine(Path.GetFileName(FilePath));
+        //        //if (File.Exists(targetFile)) File.Delete(targetFile);
+        //        // File.Copy(file, targetFile);
+        //        // doc.Load(testdata);
+        //        // xmldoc.Save(path);
 
-                string propertyFile = @"C:\tosser\inout\archive\Callback\setting.xml";
-                string propertyFolder = propertyFile.Substring(0, propertyFile.LastIndexOf("\\") + 1);
-                string newXML = propertyFolder + targetFile;
+        //        string propertyFile = @"C:\tosser\inout\archive\Callback\setting.xml";
+        //        string propertyFolder = propertyFile.Substring(0, propertyFile.LastIndexOf("\\") + 1);
+        //        string newXML = propertyFolder + targetFile;
 
-                //XmlDocument doc name of xml document in code
-                xmlDoc.Save(newXML);
+        //        //XmlDocument doc name of xml document in code
+        //        xmlDoc.Save(newXML);           
 
-                fs.Close();
-                fs.Dispose();
+        //    }
+            
+        //}
 
-            }
+       static void CopyTo(string ThisFile, string ToDestination) {
+            File.Copy(ThisFile, ToDestination);
         }
 
         static void SaveTaxes(string rawXML, Guid AssessmentId, string xmlRoot)

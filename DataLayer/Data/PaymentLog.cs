@@ -20,8 +20,10 @@ namespace DataLayer.Data
 
         public string AssessmentId { get; set; }
        
-        public int TransactionStatusId { get; set; }        
-        
+        public int TransactionStatusId { get; set; }
+
+        public string Comment { get; set; }
+
         public virtual LOV Status { get; set; }
         
         public virtual AssessmentType PaymentType {get; set;}       

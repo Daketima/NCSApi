@@ -10002,3 +10002,58 @@ NCSApi.Controllers.TaxController.FindByPaymentre (NCSApi)
    at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
    at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
    at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2020-10-20 16:28:12.739 +01:00 [INF] Processstatus id: 1 and transactio reference GWAX6741PW
+2020-10-21 12:40:08.576 +01:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: The LINQ expression 'DbSet<Assessment>
+    .Where(a => a.Year.Equals(__model_SADAssessmentYear_0) && a.AssessmentSerial.Equals(__model_SADAssessmentSerial_1) && a.AssessmentNumber.Equals(__model_SADAssessmentNumber_2))
+    .LastOrDefault()' could not be translated. Either rewrite the query in a form that can be translated, or switch to client evaluation explicitly by inserting a call to either AsEnumerable(), AsAsyncEnumerable(), ToList(), or ToListAsync(). See https://go.microsoft.com/fwlink/?linkid=2101038 for more information.
+   at Microsoft.EntityFrameworkCore.Query.QueryableMethodTranslatingExpressionVisitor.<VisitMethodCall>g__CheckTranslated|8_0(ShapedQueryExpression translated, <>c__DisplayClass8_0& )
+   at Microsoft.EntityFrameworkCore.Query.QueryableMethodTranslatingExpressionVisitor.VisitMethodCall(MethodCallExpression methodCallExpression)
+   at Microsoft.EntityFrameworkCore.Query.RelationalQueryableMethodTranslatingExpressionVisitor.VisitMethodCall(MethodCallExpression methodCallExpression)
+   at System.Linq.Expressions.MethodCallExpression.Accept(ExpressionVisitor visitor)
+   at System.Linq.Expressions.ExpressionVisitor.Visit(Expression node)
+   at Microsoft.EntityFrameworkCore.Query.QueryCompilationContext.CreateQueryExecutor[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Storage.Database.CompileQuery[TResult](Expression query, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.CompileQueryCore[TResult](IDatabase database, Expression query, IModel model, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass12_0`1.<ExecuteAsync>b__0()
+   at Microsoft.EntityFrameworkCore.Query.Internal.CompiledQueryCache.GetOrAddQueryCore[TFunc](Object cacheKey, Func`1 compiler)
+   at Microsoft.EntityFrameworkCore.Query.Internal.CompiledQueryCache.GetOrAddQuery[TResult](Object cacheKey, Func`1 compiler)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.ExecuteAsync[TResult](Expression query, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.ExecuteAsync[TResult](Expression expression, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteAsync[TSource,TResult](MethodInfo operatorMethodInfo, IQueryable`1 source, Expression expression, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteAsync[TSource,TResult](MethodInfo operatorMethodInfo, IQueryable`1 source, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.LastOrDefaultAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at NCSApi.Controllers.AssessmemtController.Post(AssessmentRequest model) in C:\Users\taj174\source\repos\NCSApi\NCSApi\Controllers\AssessmemtController.cs:line 81
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2020-10-21 12:51:57.446 +01:00 [INF] Processstatus id: 1 and transactio reference HTWY3320SU
+2020-10-26 13:42:35.599 +01:00 [INF] Attempting Customer Name Enquiry for the account: 0000002456
+2020-10-26 13:42:35.639 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-10-26 13:42:35.647 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-10-26 13:42:36.113 +01:00 [INF] Received HTTP response after 460.2847ms - "OK"
+2020-10-26 13:42:36.116 +01:00 [INF] End processing HTTP request after 489.9869ms - "OK"
+2020-10-26 13:42:36.141 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-10-26 13:42:36.141 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-10-26 13:42:36.201 +01:00 [INF] Received HTTP response after 59.8462ms - "OK"
+2020-10-26 13:42:36.202 +01:00 [INF] End processing HTTP request after 60.6286ms - "OK"
+2020-10-26 13:44:24.941 +01:00 [INF] Attempting Customer Name Enquiry for the account: 0000002456
+2020-10-26 13:44:24.984 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-10-26 13:44:24.995 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-10-26 13:44:25.265 +01:00 [INF] Received HTTP response after 264.1557ms - "OK"
+2020-10-26 13:44:25.269 +01:00 [INF] End processing HTTP request after 299.7364ms - "OK"
+2020-10-26 13:44:25.293 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-10-26 13:44:25.293 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-10-26 13:44:25.399 +01:00 [INF] Received HTTP response after 105.69ms - "OK"
+2020-10-26 13:44:25.399 +01:00 [INF] End processing HTTP request after 106.6767ms - "OK"

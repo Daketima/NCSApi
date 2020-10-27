@@ -30,9 +30,9 @@ namespace DataLayer.DataContext
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //optionsBuilder.UseSqlServer("server=TJ-DC-SRV-NCS\\SQLEXPRESS;database=CustomDuty;integrated security = true");
-            // optionsBuilder.UseSqlServer("server=172.19.2.33,1433;database=CustomeDuty;user id=appdev;password=Abcd1234");
+             optionsBuilder.UseSqlServer("server=172.19.2.33,1433;database=CustomeDuty;user id=appdev;password=Abcd1234");
            // optionsBuilder.UseSqlServer(_setting.Value.DefaultConnectionString);           
-           optionsBuilder.UseSqlServer(AppSetting.GetConnectionString());
+           //optionsBuilder.UseSqlServer(AppSetting.GetConnectionString());
         }
          protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

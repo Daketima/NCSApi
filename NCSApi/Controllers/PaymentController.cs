@@ -168,12 +168,12 @@ namespace NCSApi.Controllers
 
 
         [HttpPut]
-        [Route("accept/{paymentReference}")]
-        public async Task<IActionResult> thisAss(string paymentReference)
+        [Route("accept/{PaymentReference}")]
+        public async Task<IActionResult> thisAss(string PaymentReference)
         {
             try
             {
-                PaymentLog getAss = await _context.Payment.Where(x => x.PaymentReference == paymentReference).FirstOrDefaultAsync();
+                PaymentLog getAss = await _context.Payment.Where(x => x.PaymentReference == PaymentReference).FirstOrDefaultAsync();
                 if (getAss != null)
                 {
                     // Payment getPaymentLog = await _context.Payment.Where(x => x.AssessmentId == assessmentId.ToString()).FirstOrDefaultAsync();
@@ -192,17 +192,19 @@ namespace NCSApi.Controllers
         }
 
         [HttpPut]
-        [Route("decline/{paymentReference}")]
-        public async Task<IActionResult> thisAsses(string paymentReference)
+        [Route("decline")]
+        public async Task<IActionResult> thisAsses([FromBody] DeclineRequest model)
         {
             try
             {
 
-                PaymentLog getAss = await _context.Payment.Where(x => x.PaymentReference == paymentReference).FirstOrDefaultAsync();
+                PaymentLog getAss = await _context.Payment.Where(x => x.PaymentReference == model.PaymentRefernce).FirstOrDefaultAsync();
                 if (getAss != null)
                 {
                     // Payment getPaymentLog = await _context.Payment.Where(x => x.AssessmentId == assessmentId.ToString()).FirstOrDefaultAsync();
                     getAss.StatusId = (int)TransactionStatus.Declined;
+                    getAss.Comment = model.Comment;
+
                     _context.Update(getAss);
                     await _context.SaveChangesAsync();
 
@@ -223,9 +225,11 @@ namespace NCSApi.Controllers
         {
             try
             {
+
                 List<PaymentStatus> paymentStatuses = await _context.PaymentStatus.ToListAsync();
                 if (paymentStatuses.Any())
                 {
+                    paymentStatuses.ForEach(x => x.DateCreated.ToShortDateString());
                     //// Payment getPaymentLog = await _context.Payment.Where(x => x.AssessmentId == assessmentId.ToString()).FirstOrDefaultAsync();
                     //paymentStatuses.StatusId = (int)TransactionStatus.Accepted;
                     //_context.Update(paymentStatuses);
@@ -322,7 +326,7 @@ namespace NCSApi.Controllers
             {
 
                 xmlBuilder = xmlBuilder.Replace("{Payment Date}", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"))
-                          .Replace("{Customs Code}", Assessment?.CustomsCode ?? "Not Available")
+                          .Replace("{Customs Code}", Assessment.CustomsCode ?? "Not Available")
                           .Replace("{Company Code}", Assessment.CompanyCode ?? "Not Available")
                           .Replace("{Bank Code}", Assessment.BankCode)
                           .Replace("{Serial}", Assessment.AssessmentSerial)
@@ -332,16 +336,15 @@ namespace NCSApi.Controllers
                           .Replace("{Reference}", paymentLog.PaymentReference)
                           .Replace("{Amount}", paymentLog.Amount)
                           .Replace("{Total Amount}", Assessment.TotalAmountToBePaid);
-
             }
 
             if (AssessmentType.Equals("SD"))
             {
 
                 xmlBuilder = xmlBuilder.Replace("{Document}", AssessmentType)
-                          .Replace("{Payment Date}", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.fffffffK"))
-                          .Replace("{Customs Code}", Assessment?.CustomsCode ?? "Not Available")
-                          .Replace("{Declarant Code}", Assessment.CompanyCode ?? "Not Available")
+                          .Replace("{Payment Date}", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"))
+                          .Replace("{Customs Code}", Assessment.CustomsCode ?? "Not Available")
+                          .Replace("{Declarant Code}", Assessment.DeclarantCode ?? "Not Available")
                           .Replace("{Bank Code}", Assessment.BankCode)
                           .Replace("{Serial}", Assessment.AssessmentSerial)
                           .Replace("{Number}", Assessment.AssessmentNumber)
@@ -355,10 +358,9 @@ namespace NCSApi.Controllers
 
             if (AssessmentType.Equals("SGD"))
             {
-
                 xmlBuilder = xmlBuilder.Replace("{Payment Date}", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.fffffffK"))
-                          .Replace("{Customs Code}", Assessment?.CustomsCode)
-                          .Replace("{Declarant Code}", Assessment.CompanyCode)
+                          .Replace("{Customs Code}", Assessment.CustomsCode)
+                          .Replace("{Declarant Code}", Assessment.DeclarantCode)
                           .Replace("{Bank Code}", Assessment.BankCode)
                           .Replace("{Serial}", Assessment.AssessmentSerial)
                           .Replace("{Number}", Assessment.AssessmentNumber)
@@ -367,7 +369,6 @@ namespace NCSApi.Controllers
                           .Replace("{Reference}", paymentLog.PaymentReference)
                           .Replace("{Amount}", paymentLog.Amount)
                           .Replace("{Total Amount}", Assessment.TotalAmountToBePaid);
-
             }
 
             return xmlBuilder;
@@ -376,11 +377,11 @@ namespace NCSApi.Controllers
 
         void PaymentResponseFinder(PaymentLog PaymentLog, out bool ResponseReceived, out string Message, string assessmentType)
         {
-            int retry = 20;
+            int retry = 50;
             PaymentStatus paymentStatus = null;
             ResponseReceived = false;
             Message = string.Empty;
-            int counter = -20;
+            int counter = -50;
             string responsePath = assessmentType == "Excise" ? _dutyConfig.ExciseResponsePath : @"C:\tosser\inout\eresponse";
 
             do
@@ -413,12 +414,10 @@ namespace NCSApi.Controllers
                                         Message = node["Info"]["Message"].InnerText,
                                         DateCreated = DateTime.Now,
                                         PaymentLogId = PaymentLog.Id
-
                                     };
                                 }
                                 else
                                 {
-
                                     paymentStatus = new PaymentStatus
                                     {
                                         CustomsCode = node["CustomsCode"].InnerText,
@@ -445,6 +444,8 @@ namespace NCSApi.Controllers
                                     ResponseReceived = (counter == 0);
                                     Message = paymentStatus.Message;
 
+                                    cleaner.DeleteFile(assessmentType == "Excise" ? _dutyConfig.ExciseResponsePath : @"C:\tosser\inout\eresponse");
+
                                     Log.Information("Updation transaction status");
                                     PaymentLog.StatusId = (int)TransactionStatus.Completed;
                                     PaymentLog.TransactionStatusId = (int)TransactionStatus.Completed;
@@ -466,6 +467,9 @@ namespace NCSApi.Controllers
         }
 
 
+        #region response and requet classed
+
+
         private class IntraTransferRequest
         {
             public string RequestID { get; set; }
@@ -480,6 +484,24 @@ namespace NCSApi.Controllers
             public decimal TranAmount { get; set; }
             public string Narration { get; set; }
         }
+
+
+        public class BalanceEnquiryResponse
+        {
+            public string ResponseMessage { get; set; }
+            public string ResponseDescription { get; set; }
+            public ResponseDetail response { get; set; }
+        }
+
+        public class ResponseDetail
+        {
+            public float AvailableBalance { get; set; }
+            public float ReservedAmount { get; set; }
+            public string AccountCurrency { get; set; }
+        }
+
+
+        #endregion
 
 
         private int RandomNumber(int min, int max)
@@ -529,8 +551,8 @@ namespace NCSApi.Controllers
         {
             ErrorIsReceived = false;
             var getPaymentLog = _context.Payment.Find(paymentId);
-            int retry = 20;
-            int counter = -20;
+            int retry = 50;
+            int counter = -50;
             PaymentStatus paymentStatus = null;
             Message = string.Empty;
 
@@ -596,6 +618,8 @@ namespace NCSApi.Controllers
                                     counter = 0;
                                     ErrorIsReceived = counter == 0;
 
+                                    cleaner.DeleteFile(@"C:\tosser\inout\err");
+
                                     Message = paymentStatus.Message;
                                     Log.Information("Error received");
                                     getPaymentLog.StatusId = (int)TransactionStatus.Completed;
@@ -636,7 +660,33 @@ namespace NCSApi.Controllers
             }
         }
 
+        //    void BalanceEquiry(string AccountNumber, string debitmount, out bool FundIsSufficient)
+        //    {
+        //        FundIsSufficient = false;
+
+        //        var msg = new { Account = AccountNumber };
+
+        //        HttpRequestMessage request = new HttpRequestMessage
+        //        {
+        //            RequestUri = new Uri($"{_dutyConfig.BaseUrl}{_dutyConfig.NameEnquiry}"),
+        //            Method = HttpMethod.Post,
+        //            Content = new StringContent(JsonConvert.SerializeObject(msg), Encoding.UTF8, "application/json")
+        //        };
+
+        //        Log.Information($"Starting balance enquiry for the account: {AccountNumber}");
+        //        var response = Task.Run(() =>  _client.SendKaoshiRequest(request)).Result;
+
+        //         if (response.IsSuccessStatusCode)
+        //            {
+
+        //              string response = response.con
 
 
+
+        //            }
+
+
+
+        //}
     }
 }

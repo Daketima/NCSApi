@@ -38,5 +38,8 @@ namespace CustomDutyJob
 
 		[XmlElement(ElementName = "TotalAmountToBePaid")]
 		public string TotalAmountToBePaid { get; set; }
+
+		[XmlAttribute(AttributeName = "version")]
+		public string version { get; set; }
 	}
 }
