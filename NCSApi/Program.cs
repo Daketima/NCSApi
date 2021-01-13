@@ -18,8 +18,13 @@ namespace NCSApi
         {
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
+                //.MinimumLevel.Verbose()
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-                .Enrich.FromLogContext().WriteTo.File(Path.Combine(Directory.GetCurrentDirectory(), "Logging\\log.txt")).CreateLogger();
+                .Enrich.FromLogContext()
+                .WriteTo.File(Path.Combine(Directory.GetCurrentDirectory(), "Logging\\log.txt"), rollingInterval: RollingInterval.Day)
+                .CreateLogger();
+               
+           
             CreateHostBuilder(args).Build().Run();
         }
 

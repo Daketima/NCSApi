@@ -10057,3 +10057,685 @@ System.InvalidOperationException: The LINQ expression 'DbSet<Assessment>
 2020-10-26 13:44:25.293 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
 2020-10-26 13:44:25.399 +01:00 [INF] Received HTTP response after 105.69ms - "OK"
 2020-10-26 13:44:25.399 +01:00 [INF] End processing HTTP request after 106.6767ms - "OK"
+2020-10-27 15:55:02.037 +01:00 [INF] Processstatus id: 4 and transactio reference EKOH1283SM
+2020-10-27 16:48:59.023 +01:00 [INF] Processstatus id: 4 and transactio reference EKOH1283SM
+2020-10-28 09:18:19.061 +01:00 [INF] Attempting Customer Name Enquiry for the account: 0000002456
+2020-10-28 09:18:19.101 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-10-28 09:18:19.116 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-10-28 09:18:19.412 +01:00 [INF] Received HTTP response after 289.5813ms - "OK"
+2020-10-28 09:18:19.416 +01:00 [INF] End processing HTTP request after 328.6131ms - "OK"
+2020-10-28 09:18:19.443 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-10-28 09:18:19.444 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-10-28 09:18:19.532 +01:00 [INF] Received HTTP response after 88.5613ms - "OK"
+2020-10-28 09:18:19.533 +01:00 [INF] End processing HTTP request after 89.397ms - "OK"
+2020-10-28 09:24:33.266 +01:00 [INF] Error received
+2020-10-28 09:24:33.484 +01:00 [ERR] Could not find file 'C:\tosser\inout\err\epay9498364293754467.xml'.
+System.IO.FileNotFoundException: Could not find file 'C:\tosser\inout\err\epay9498364293754467.xml'.
+File name: 'C:\tosser\inout\err\epay9498364293754467.xml'
+   at System.IO.FileStream.ValidateFileHandle(SafeFileHandle fileHandle)
+   at System.IO.FileStream.CreateFileOpenHandle(FileMode mode, FileShare share, FileOptions options)
+   at System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, FileOptions options)
+   at System.IO.StreamReader.ValidateArgsAndOpenPath(String path, Encoding encoding, Int32 bufferSize)
+   at System.IO.StreamReader..ctor(String path, Encoding encoding, Boolean detectEncodingFromByteOrderMarks)
+   at System.IO.File.InternalReadAllText(String path, Encoding encoding)
+   at System.IO.File.ReadAllText(String path)
+   at NCSApi.Controllers.PaymentController.ProcessNCSError(Guid paymentId, Boolean& ErrorIsReceived, String& Message) in C:\Users\taj174\source\repos\NCSApi\NCSApi\Controllers\PaymentController.cs:line 566
+   at NCSApi.Controllers.PaymentController.Get(String PaymentReference) in C:\Users\taj174\source\repos\NCSApi\NCSApi\Controllers\PaymentController.cs:line 105
+2020-10-28 09:45:27.071 +01:00 [INF] Attempting Customer Name Enquiry for the account: 0000002456
+2020-10-28 09:45:27.140 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-10-28 09:45:27.149 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-10-28 09:45:29.220 +01:00 [INF] Received HTTP response after 2063.9711ms - "OK"
+2020-10-28 09:45:29.223 +01:00 [INF] End processing HTTP request after 2096.3912ms - "OK"
+2020-10-28 09:45:29.250 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-10-28 09:45:29.250 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-10-28 09:45:31.119 +01:00 [INF] Received HTTP response after 1868.6712ms - "OK"
+2020-10-28 09:45:31.120 +01:00 [INF] End processing HTTP request after 1870.2695ms - "OK"
+2020-10-28 09:50:09.869 +01:00 [INF] Attempting Customer Name Enquiry for the account: 0000002456
+2020-10-28 09:50:09.939 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-10-28 09:50:09.951 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-10-28 09:50:10.286 +01:00 [INF] Received HTTP response after 326.3206ms - "OK"
+2020-10-28 09:50:10.289 +01:00 [INF] End processing HTTP request after 372.5723ms - "OK"
+2020-10-28 09:50:10.319 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-10-28 09:50:10.319 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-10-28 09:50:10.435 +01:00 [INF] Received HTTP response after 115.8441ms - "OK"
+2020-10-28 09:50:10.436 +01:00 [INF] End processing HTTP request after 116.8433ms - "OK"
+2020-10-28 09:51:41.246 +01:00 [ERR] Sequence contains no elements
+System.InvalidOperationException: Sequence contains no elements
+   at System.Linq.ThrowHelper.ThrowNoElementsException()
+   at System.Linq.Enumerable.Single[TSource](IEnumerable`1 source)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.Execute[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.Execute[TResult](Expression expression)
+   at System.Linq.Queryable.First[TSource](IQueryable`1 source)
+   at NCSApi.Controllers.PaymentController.ProcessNCSError(Guid paymentId, Boolean& ErrorIsReceived, String& Message) in C:\Users\taj174\source\repos\NCSApi\NCSApi\Controllers\PaymentController.cs:line 610
+   at NCSApi.Controllers.PaymentController.Get(String PaymentReference) in C:\Users\taj174\source\repos\NCSApi\NCSApi\Controllers\PaymentController.cs:line 105
+2020-10-28 09:54:28.788 +01:00 [INF] Attempting Customer Name Enquiry for the account: 0000002456
+2020-10-28 09:54:28.837 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-10-28 09:54:28.846 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-10-28 09:54:29.099 +01:00 [INF] Received HTTP response after 247.4722ms - "OK"
+2020-10-28 09:54:29.101 +01:00 [INF] End processing HTTP request after 281.6844ms - "OK"
+2020-10-28 09:54:29.125 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-10-28 09:54:29.125 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-10-28 09:54:29.226 +01:00 [INF] Received HTTP response after 100.2945ms - "OK"
+2020-10-28 09:54:29.226 +01:00 [INF] End processing HTTP request after 100.7987ms - "OK"
+2020-10-28 09:55:36.099 +01:00 [INF] Error received
+2020-10-28 09:55:54.385 +01:00 [INF] Attempting Customer Name Enquiry for the account: 0000002456
+2020-10-28 09:55:54.386 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-10-28 09:55:54.386 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-10-28 09:55:54.447 +01:00 [INF] Received HTTP response after 60.9335ms - "OK"
+2020-10-28 09:55:54.447 +01:00 [INF] End processing HTTP request after 61.7026ms - "OK"
+2020-10-28 09:55:54.448 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-10-28 09:55:54.448 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-10-28 09:55:54.558 +01:00 [INF] Received HTTP response after 110.0666ms - "OK"
+2020-10-28 09:55:54.558 +01:00 [INF] End processing HTTP request after 110.4102ms - "OK"
+2020-10-28 10:01:01.580 +01:00 [INF] Attempting Customer Name Enquiry for the account: 0000002456
+2020-10-28 10:01:01.631 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-10-28 10:01:01.640 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-10-28 10:01:01.889 +01:00 [INF] Received HTTP response after 243.2747ms - "OK"
+2020-10-28 10:01:01.891 +01:00 [INF] End processing HTTP request after 275.6914ms - "OK"
+2020-10-28 10:01:01.921 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-10-28 10:01:01.921 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-10-28 10:01:02.049 +01:00 [INF] Received HTTP response after 128.3374ms - "OK"
+2020-10-28 10:01:02.051 +01:00 [INF] End processing HTTP request after 130.2413ms - "OK"
+2020-10-28 10:02:47.546 +01:00 [INF] Error received
+2020-10-28 10:42:35.379 +01:00 [INF] Attempting Customer Name Enquiry for the account: 0000002456
+2020-10-28 10:42:35.431 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-10-28 10:42:35.456 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-10-28 10:42:35.767 +01:00 [INF] Received HTTP response after 303.9044ms - "OK"
+2020-10-28 10:42:35.769 +01:00 [INF] End processing HTTP request after 357.9082ms - "OK"
+2020-10-28 10:42:35.790 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-10-28 10:42:35.790 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-10-28 10:42:35.924 +01:00 [INF] Received HTTP response after 134.0021ms - "OK"
+2020-10-28 10:42:35.925 +01:00 [INF] End processing HTTP request after 134.501ms - "OK"
+2020-10-28 10:45:29.403 +01:00 [INF] Attempting Customer Name Enquiry for the account: 0000002456
+2020-10-28 10:45:29.452 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-10-28 10:45:29.463 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-10-28 10:45:29.921 +01:00 [INF] Received HTTP response after 451.9378ms - "OK"
+2020-10-28 10:45:29.924 +01:00 [INF] End processing HTTP request after 483.9511ms - "OK"
+2020-10-28 10:45:29.949 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-10-28 10:45:29.949 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-10-28 10:45:30.059 +01:00 [INF] Received HTTP response after 109.5128ms - "OK"
+2020-10-28 10:45:30.059 +01:00 [INF] End processing HTTP request after 110.3708ms - "OK"
+2020-10-28 10:54:29.131 +01:00 [INF] Attempting Customer Name Enquiry for the account: 0000002456
+2020-10-28 10:54:29.177 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-10-28 10:54:29.187 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-10-28 10:54:29.451 +01:00 [INF] Received HTTP response after 259.3438ms - "OK"
+2020-10-28 10:54:29.454 +01:00 [INF] End processing HTTP request after 289.2998ms - "OK"
+2020-10-28 10:54:29.477 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-10-28 10:54:29.477 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-10-28 10:54:29.619 +01:00 [INF] Received HTTP response after 141.0488ms - "OK"
+2020-10-28 10:54:29.620 +01:00 [INF] End processing HTTP request after 143.2062ms - "OK"
+2020-10-28 10:54:29.656 +01:00 [INF] Waiting for success response from NCS
+2020-10-28 10:54:29.697 +01:00 [INF] Waiting for error response from NCS
+2020-10-28 10:56:27.976 +01:00 [INF] Attempting Customer Name Enquiry for the account: 0000002456
+2020-10-28 10:56:28.018 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-10-28 10:56:28.026 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-10-28 10:56:28.321 +01:00 [INF] Received HTTP response after 276.541ms - "OK"
+2020-10-28 10:56:28.323 +01:00 [INF] End processing HTTP request after 322.3221ms - "OK"
+2020-10-28 10:56:28.344 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-10-28 10:56:28.344 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-10-28 10:56:28.457 +01:00 [INF] Received HTTP response after 112.2937ms - "OK"
+2020-10-28 10:56:28.457 +01:00 [INF] End processing HTTP request after 112.8855ms - "OK"
+2020-10-28 10:56:28.478 +01:00 [INF] Waiting for success response from NCS
+2020-10-28 10:56:28.520 +01:00 [INF] Waiting for error response from NCS
+2020-10-28 10:57:57.934 +01:00 [INF] Attempting Customer Name Enquiry for the account: 0000002456
+2020-10-28 10:57:57.974 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-10-28 10:57:57.985 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-10-28 10:57:58.275 +01:00 [INF] Received HTTP response after 283.3339ms - "OK"
+2020-10-28 10:57:58.277 +01:00 [INF] End processing HTTP request after 317.7371ms - "OK"
+2020-10-28 10:57:58.303 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-10-28 10:57:58.303 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-10-28 10:57:58.419 +01:00 [INF] Received HTTP response after 116.0834ms - "OK"
+2020-10-28 10:57:58.420 +01:00 [INF] End processing HTTP request after 116.8846ms - "OK"
+2020-10-28 10:57:58.448 +01:00 [INF] Waiting for success response from NCS
+2020-10-28 10:57:58.507 +01:00 [INF] Waiting for error response from NCS
+2020-10-28 10:58:18.652 +01:00 [INF] Error received
+2020-10-28 11:13:59.612 +01:00 [INF] Attempting Customer Name Enquiry for the account: 0000002456
+2020-10-28 11:13:59.674 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-10-28 11:13:59.689 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-10-28 11:14:00.065 +01:00 [INF] Received HTTP response after 370.8857ms - "OK"
+2020-10-28 11:14:00.067 +01:00 [INF] End processing HTTP request after 408.5068ms - "OK"
+2020-10-28 11:14:00.094 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-10-28 11:14:00.094 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-10-28 11:14:00.206 +01:00 [INF] Received HTTP response after 112.08ms - "OK"
+2020-10-28 11:14:00.207 +01:00 [INF] End processing HTTP request after 113.0264ms - "OK"
+2020-10-28 11:14:40.592 +01:00 [INF] Error received
+2020-10-28 11:25:43.050 +01:00 [INF] Attempting Customer Name Enquiry for the account: 0000002456
+2020-10-28 11:25:43.051 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-10-28 11:25:43.051 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-10-28 11:25:43.155 +01:00 [INF] Received HTTP response after 104.4056ms - "OK"
+2020-10-28 11:25:43.156 +01:00 [INF] End processing HTTP request after 105.5555ms - "OK"
+2020-10-28 11:25:43.157 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-10-28 11:25:43.158 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-10-28 11:25:43.282 +01:00 [INF] Received HTTP response after 123.8324ms - "OK"
+2020-10-28 11:25:43.283 +01:00 [INF] End processing HTTP request after 125.5706ms - "OK"
+2020-10-28 11:26:23.460 +01:00 [INF] Error received
+2020-10-28 11:28:08.294 +01:00 [INF] Attempting Customer Name Enquiry for the account: 0000002456
+2020-10-28 11:28:08.334 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-10-28 11:28:08.346 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-10-28 11:28:08.667 +01:00 [INF] Received HTTP response after 315.9608ms - "OK"
+2020-10-28 11:28:08.670 +01:00 [INF] End processing HTTP request after 348.2801ms - "OK"
+2020-10-28 11:28:08.692 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-10-28 11:28:08.692 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-10-28 11:28:08.787 +01:00 [INF] Received HTTP response after 94.1776ms - "OK"
+2020-10-28 11:28:08.787 +01:00 [INF] End processing HTTP request after 94.7267ms - "OK"
+2020-10-28 11:28:49.053 +01:00 [INF] Error received
+2020-10-28 11:51:16.281 +01:00 [INF] Attempting Customer Name Enquiry for the account: 0000002456
+2020-10-28 11:51:16.282 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-10-28 11:51:16.282 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-10-28 11:51:18.170 +01:00 [INF] Received HTTP response after 1887.227ms - "OK"
+2020-10-28 11:51:18.171 +01:00 [INF] End processing HTTP request after 1889.2779ms - "OK"
+2020-10-28 11:51:18.174 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-10-28 11:51:18.175 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-10-28 11:51:20.262 +01:00 [INF] Received HTTP response after 2086.8765ms - "OK"
+2020-10-28 11:51:20.263 +01:00 [INF] End processing HTTP request after 2088.5909ms - "OK"
+2020-10-28 11:52:00.451 +01:00 [INF] Error received
+2020-10-30 17:02:42.841 +01:00 [ERR] An unhandled exception has occurred while executing the request.
+Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Ambiguous HTTP method for action - NCSApi.Controllers.AssessmemtController.thisAss (NCSApi). Actions require an explicit HttpMethod binding for Swagger/OpenAPI 3.0
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperations(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePaths(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwagger(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2020-10-30 17:04:48.508 +01:00 [ERR] An unhandled exception has occurred while executing the request.
+Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Ambiguous HTTP method for action - NCSApi.Controllers.AssessmemtController.thisAss (NCSApi). Actions require an explicit HttpMethod binding for Swagger/OpenAPI 3.0
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperations(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePaths(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwagger(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2020-10-30 17:05:39.980 +01:00 [ERR] An unhandled exception has occurred while executing the request.
+Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Ambiguous HTTP method for action - NCSApi.Controllers.AssessmemtController.thisAss (NCSApi). Actions require an explicit HttpMethod binding for Swagger/OpenAPI 3.0
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperations(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePaths(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwagger(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2020-11-04 09:49:32.949 +01:00 [INF] Processstatus id: 1 and transactio reference HTWY3320SU
+2020-11-04 12:35:02.984 +01:00 [INF] Attempting Customer Name Enquiry for the account: 0000002456
+2020-11-04 12:35:21.422 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-11-04 12:35:21.430 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-11-04 12:35:24.382 +01:00 [INF] Received HTTP response after 2947.5769ms - "Unauthorized"
+2020-11-04 12:35:24.387 +01:00 [INF] End processing HTTP request after 2976.6239ms - "Unauthorized"
+2020-11-04 12:38:05.929 +01:00 [INF] Attempting Customer Name Enquiry for the account: 0000002456
+2020-11-04 12:38:09.102 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-11-04 12:38:09.110 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-11-04 12:38:09.379 +01:00 [INF] Received HTTP response after 263.7684ms - "Unauthorized"
+2020-11-04 12:38:09.381 +01:00 [INF] End processing HTTP request after 291.1305ms - "Unauthorized"
+2020-11-04 12:40:03.383 +01:00 [INF] Attempting Customer Name Enquiry for the account: 0000002456
+2020-11-04 12:40:06.970 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-11-04 12:40:06.977 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-11-04 12:40:07.244 +01:00 [INF] Received HTTP response after 262.3405ms - "OK"
+2020-11-04 12:40:07.247 +01:00 [INF] End processing HTTP request after 286.5039ms - "OK"
+2020-11-04 12:46:08.822 +01:00 [INF] Attempting Customer Name Enquiry for the account: 0000002456
+2020-11-04 12:46:11.952 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-11-04 12:46:11.968 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-11-04 12:46:12.813 +01:00 [INF] Received HTTP response after 839.8262ms - "OK"
+2020-11-04 12:46:12.815 +01:00 [INF] End processing HTTP request after 879.6022ms - "OK"
+2020-11-04 12:46:40.350 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-11-04 12:46:40.350 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-11-04 12:46:42.415 +01:00 [INF] Received HTTP response after 2064.3698ms - "OK"
+2020-11-04 12:46:42.417 +01:00 [INF] End processing HTTP request after 2067.0612ms - "OK"
+2020-11-04 12:48:28.209 +01:00 [INF] Attempting Customer Name Enquiry for the account: 0000002456
+2020-11-04 12:48:31.633 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-11-04 12:48:31.633 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-11-04 12:48:31.686 +01:00 [INF] Received HTTP response after 53.3703ms - "OK"
+2020-11-04 12:48:31.687 +01:00 [INF] End processing HTTP request after 54.6445ms - "OK"
+2020-11-04 12:48:31.688 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-11-04 12:48:31.688 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-11-04 12:48:31.800 +01:00 [INF] Received HTTP response after 111.4195ms - "OK"
+2020-11-04 12:48:31.800 +01:00 [INF] End processing HTTP request after 111.8932ms - "OK"
+2020-11-04 12:48:51.917 +01:00 [INF] Attempting Customer Name Enquiry for the account: 0000002456
+2020-11-04 12:48:54.533 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-11-04 12:48:54.533 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-11-04 12:48:54.585 +01:00 [INF] Received HTTP response after 51.2203ms - "OK"
+2020-11-04 12:48:54.585 +01:00 [INF] End processing HTTP request after 52.2031ms - "OK"
+2020-11-04 12:48:54.586 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-11-04 12:48:54.586 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-11-04 12:48:54.659 +01:00 [INF] Received HTTP response after 73.0525ms - "OK"
+2020-11-04 12:48:54.660 +01:00 [INF] End processing HTTP request after 73.4868ms - "OK"
+2020-11-04 12:59:16.190 +01:00 [INF] Attempting Customer Name Enquiry for the account: 0000002456
+2020-11-04 13:22:49.870 +01:00 [INF] Attempting Customer Name Enquiry for the account: 0000002456
+2020-11-04 13:22:53.602 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-11-04 13:22:53.614 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-11-04 13:22:55.901 +01:00 [INF] Received HTTP response after 2282.1914ms - "OK"
+2020-11-04 13:22:55.903 +01:00 [INF] End processing HTTP request after 2315.2405ms - "OK"
+2020-11-04 13:23:03.372 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-11-04 13:23:03.372 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-11-04 13:23:05.241 +01:00 [INF] Received HTTP response after 1868.5829ms - "OK"
+2020-11-04 13:23:05.242 +01:00 [INF] End processing HTTP request after 1870.3834ms - "OK"
+2020-11-04 13:57:43.575 +01:00 [INF] Attempting Customer Name Enquiry for the account: 0000002456
+2020-11-04 13:57:46.572 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-11-04 13:57:46.580 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-11-04 13:57:46.819 +01:00 [INF] Received HTTP response after 233.9987ms - "OK"
+2020-11-04 13:57:46.821 +01:00 [INF] End processing HTTP request after 258.2364ms - "OK"
+2020-11-04 13:57:52.032 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-11-04 13:57:52.032 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-11-04 13:57:52.188 +01:00 [INF] Received HTTP response after 155.9507ms - "OK"
+2020-11-04 13:57:52.189 +01:00 [INF] End processing HTTP request after 156.9672ms - "OK"
+2020-11-04 13:58:58.596 +01:00 [INF] Error received
+2020-11-04 13:59:06.282 +01:00 [ERR] A second operation started on this context before a previous operation completed. This is usually caused by different threads using the same instance of DbContext. For more information on how to avoid threading issues with DbContext, see https://go.microsoft.com/fwlink/?linkid=2097913.
+System.InvalidOperationException: A second operation started on this context before a previous operation completed. This is usually caused by different threads using the same instance of DbContext. For more information on how to avoid threading issues with DbContext, see https://go.microsoft.com/fwlink/?linkid=2097913.
+   at Microsoft.EntityFrameworkCore.Internal.ConcurrencyDetector.EnterCriticalSection()
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.Enumerator.MoveNext()
+   at System.Linq.Enumerable.SingleOrDefault[TSource](IEnumerable`1 source)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.Execute[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.Execute[TResult](Expression expression)
+   at System.Linq.Queryable.FirstOrDefault[TSource](IQueryable`1 source)
+   at NCSApi.Controllers.PaymentController.ProcessNCSError(Guid paymentId, Boolean& ErrorIsReceived, String& Message) in C:\Users\taj174\source\repos\NCSApi\NCSApi\Controllers\PaymentController.cs:line 659
+   at NCSApi.Controllers.PaymentController.Get(String PaymentReference) in C:\Users\taj174\source\repos\NCSApi\NCSApi\Controllers\PaymentController.cs:line 114
+2020-11-04 13:59:16.290 +01:00 [INF] Attempting Customer Name Enquiry for the account: 0000002456
+2020-11-04 13:59:19.734 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-11-04 13:59:19.734 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-11-04 13:59:19.792 +01:00 [INF] Received HTTP response after 58.1509ms - "OK"
+2020-11-04 13:59:19.793 +01:00 [INF] End processing HTTP request after 59.2207ms - "OK"
+2020-11-04 13:59:24.388 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-11-04 13:59:24.390 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-11-04 13:59:24.509 +01:00 [INF] Received HTTP response after 119.1961ms - "OK"
+2020-11-04 13:59:24.510 +01:00 [INF] End processing HTTP request after 122.1767ms - "OK"
+2020-11-04 14:01:04.767 +01:00 [INF] Attempting Customer Name Enquiry for the account: 0000002456
+2020-11-04 14:01:08.566 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-11-04 14:01:08.573 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-11-04 14:01:08.769 +01:00 [INF] Received HTTP response after 191.5743ms - "OK"
+2020-11-04 14:01:08.771 +01:00 [INF] End processing HTTP request after 215.0786ms - "OK"
+2020-11-04 14:01:08.798 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-11-04 14:01:08.798 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-11-04 14:01:08.906 +01:00 [INF] Received HTTP response after 107.9046ms - "OK"
+2020-11-04 14:01:08.908 +01:00 [INF] End processing HTTP request after 110.5502ms - "OK"
+2020-11-04 14:01:29.013 +01:00 [INF] Error received
+2020-11-04 14:24:11.568 +01:00 [INF] Attempting Customer Name Enquiry for the account: 0000002456
+2020-11-05 10:31:38.547 +01:00 [INF] Attempting Customer Name Enquiry for the account: 0000002456
+2020-11-05 10:31:47.281 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-11-05 10:31:47.290 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-11-05 10:31:49.241 +01:00 [INF] Received HTTP response after 1943.9907ms - "OK"
+2020-11-05 10:31:49.247 +01:00 [INF] End processing HTTP request after 1980.6606ms - "OK"
+2020-11-05 10:43:26.113 +01:00 [INF] Attempting Customer Name Enquiry for the account: 0000002456
+2020-11-05 10:43:29.943 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-11-05 10:43:29.951 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-11-05 10:43:30.315 +01:00 [INF] Received HTTP response after 359.1945ms - "OK"
+2020-11-05 10:43:30.317 +01:00 [INF] End processing HTTP request after 385.0236ms - "OK"
+2020-11-05 10:47:31.209 +01:00 [INF] Attempting Customer Name Enquiry for the account: 0000002456
+2020-11-05 10:47:38.922 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-11-05 10:47:38.934 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-11-05 10:47:39.205 +01:00 [INF] Received HTTP response after 266.2423ms - "OK"
+2020-11-05 10:47:39.207 +01:00 [INF] End processing HTTP request after 302.1211ms - "OK"
+2020-11-05 10:51:49.985 +01:00 [INF] Attempting Customer Name Enquiry for the account: 0000002456
+2020-11-05 10:52:01.861 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-11-05 10:52:01.868 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-11-05 10:52:02.202 +01:00 [INF] Received HTTP response after 327.9163ms - "OK"
+2020-11-05 10:52:02.206 +01:00 [INF] End processing HTTP request after 354.366ms - "OK"
+2020-11-05 10:52:11.583 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-11-05 10:52:11.584 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-11-05 10:52:11.719 +01:00 [INF] Received HTTP response after 134.4713ms - "OK"
+2020-11-05 10:52:11.719 +01:00 [INF] End processing HTTP request after 135.7593ms - "OK"
+2020-11-05 10:53:00.549 +01:00 [INF] Error received
+2020-11-05 10:53:10.702 +01:00 [INF] Attempting Customer Name Enquiry for the account: 0000002456
+2020-11-05 10:53:17.907 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-11-05 10:53:17.907 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-11-05 10:53:17.956 +01:00 [INF] Received HTTP response after 49.3297ms - "OK"
+2020-11-05 10:53:17.957 +01:00 [INF] End processing HTTP request after 50.1723ms - "OK"
+2020-11-05 10:55:06.725 +01:00 [INF] Attempting Customer Name Enquiry for the account: 0000002456
+2020-11-05 10:55:06.765 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-11-05 10:55:06.776 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-11-05 10:55:07.013 +01:00 [INF] Received HTTP response after 230.6794ms - "OK"
+2020-11-05 10:55:07.016 +01:00 [INF] End processing HTTP request after 264.6581ms - "OK"
+2020-11-05 10:55:11.854 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-11-05 10:55:11.854 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-11-05 10:55:11.991 +01:00 [INF] Received HTTP response after 136.0823ms - "OK"
+2020-11-05 10:55:11.991 +01:00 [INF] End processing HTTP request after 136.7071ms - "OK"
+2020-11-05 10:55:32.102 +01:00 [INF] Error received
+2020-11-05 10:55:45.316 +01:00 [INF] Attempting Customer Name Enquiry for the account: 0000002456
+2020-11-05 10:55:47.854 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-11-05 10:55:47.855 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-11-05 10:55:47.907 +01:00 [INF] Received HTTP response after 52.0077ms - "OK"
+2020-11-05 10:55:47.907 +01:00 [INF] End processing HTTP request after 53.0242ms - "OK"
+2020-11-05 10:56:13.158 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-11-05 10:56:13.159 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-11-05 10:56:13.871 +01:00 [INF] Received HTTP response after 711.6397ms - "OK"
+2020-11-05 10:56:13.871 +01:00 [INF] End processing HTTP request after 714.0862ms - "OK"
+2020-11-05 10:56:58.324 +01:00 [INF] Error received
+2020-11-05 15:03:01.127 +01:00 [INF] Attempting Customer Name Enquiry for the account: 0000002456
+2020-11-05 15:03:05.251 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-11-05 15:03:05.259 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-11-05 15:03:07.420 +01:00 [INF] Received HTTP response after 2155.3672ms - "OK"
+2020-11-05 15:03:07.424 +01:00 [INF] End processing HTTP request after 2186.3344ms - "OK"
+2020-11-05 15:03:26.763 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-11-05 15:03:26.764 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-11-05 15:03:29.551 +01:00 [INF] Received HTTP response after 2787.3148ms - "OK"
+2020-11-05 15:03:29.552 +01:00 [INF] End processing HTTP request after 2790.0493ms - "OK"
+2020-11-05 15:05:45.894 +01:00 [INF] Attempting Customer Name Enquiry for the account: 0000002456
+2020-11-05 15:05:51.153 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-11-05 15:05:51.153 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-11-05 15:05:51.244 +01:00 [INF] Received HTTP response after 90.1041ms - "OK"
+2020-11-05 15:05:51.244 +01:00 [INF] End processing HTTP request after 91.514ms - "OK"
+2020-11-05 15:06:00.270 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-11-05 15:06:00.271 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-11-05 15:06:00.377 +01:00 [INF] Received HTTP response after 105.68ms - "OK"
+2020-11-05 15:06:00.378 +01:00 [INF] End processing HTTP request after 107.7634ms - "OK"
+2020-11-05 15:15:34.501 +01:00 [INF] Attempting Customer Name Enquiry for the account: 0000002456
+2020-11-05 15:15:46.035 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-11-05 15:15:46.043 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-11-05 15:15:46.307 +01:00 [INF] Received HTTP response after 260.1052ms - "OK"
+2020-11-05 15:15:46.310 +01:00 [INF] End processing HTTP request after 284.7277ms - "OK"
+2020-11-05 15:15:58.691 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-11-05 15:15:58.691 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-11-05 15:16:00.473 +01:00 [INF] Received HTTP response after 1781.2503ms - "OK"
+2020-11-05 15:16:00.473 +01:00 [INF] End processing HTTP request after 1782.6593ms - "OK"
+2020-11-05 15:22:02.696 +01:00 [INF] Attempting Customer Name Enquiry for the account: 0000002456
+2020-11-05 15:22:06.194 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-11-05 15:22:06.207 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-11-05 15:22:06.423 +01:00 [INF] Received HTTP response after 210.1601ms - "OK"
+2020-11-05 15:22:06.426 +01:00 [INF] End processing HTTP request after 245.075ms - "OK"
+2020-11-05 15:22:19.459 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-11-05 15:22:19.460 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-11-05 15:22:21.303 +01:00 [INF] Received HTTP response after 1801.2012ms - "OK"
+2020-11-05 15:22:21.304 +01:00 [INF] End processing HTTP request after 1845.3833ms - "OK"
+2020-11-05 15:24:24.420 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-11-05 15:24:24.420 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-11-05 15:24:25.997 +01:00 [INF] Received HTTP response after 1576.3313ms - "OK"
+2020-11-05 15:24:25.998 +01:00 [INF] End processing HTTP request after 1578.2706ms - "OK"
+2020-11-05 15:25:20.869 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-11-05 15:25:20.870 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8070//api//CBA//IntraBankAccountTransfer"
+2020-11-05 15:25:21.946 +01:00 [INF] Received HTTP response after 1075.7362ms - "OK"
+2020-11-05 15:25:21.949 +01:00 [INF] End processing HTTP request after 1080.744ms - "OK"
+2020-11-05 15:26:05.541 +01:00 [INF] Updation transaction status
+2020-11-10 10:04:23.157 +01:00 [INF] Start processing HTTP request POST "http://172.16.200.172/api/account/getsupervisorsbybranchcode?branchCode=302080029&appName=Carp"
+2020-11-10 10:04:23.231 +01:00 [INF] Sending HTTP request POST "http://172.16.200.172/api/account/getsupervisorsbybranchcode?branchCode=302080029&appName=Carp"
+2020-11-10 10:04:36.793 +01:00 [INF] Received HTTP response after 13557.4483ms - "InternalServerError"
+2020-11-10 10:04:36.800 +01:00 [INF] End processing HTTP request after 13658.6305ms - "InternalServerError"
+2020-11-10 10:11:26.064 +01:00 [INF] Start processing HTTP request GET "http://172.16.200.172/api/account/getsupervisorsbybranchcode?branchCode=302080029&appName=Carp"
+2020-11-10 10:11:26.101 +01:00 [INF] Sending HTTP request GET "http://172.16.200.172/api/account/getsupervisorsbybranchcode?branchCode=302080029&appName=Carp"
+2020-11-10 10:11:27.494 +01:00 [INF] Received HTTP response after 1385.2953ms - "InternalServerError"
+2020-11-10 10:11:27.500 +01:00 [INF] End processing HTTP request after 1457.8618ms - "InternalServerError"
+2020-11-10 11:53:21.116 +01:00 [INF] Start processing HTTP request GET "http://172.16.200.172/TAJCentralAuth/api/account/getsupervisorsbybranchcode?branchCode=302080029&appName=Carp"
+2020-11-10 11:53:21.142 +01:00 [INF] Sending HTTP request GET "http://172.16.200.172/TAJCentralAuth/api/account/getsupervisorsbybranchcode?branchCode=302080029&appName=Carp"
+2020-11-10 11:53:23.343 +01:00 [INF] Received HTTP response after 2195.6695ms - "OK"
+2020-11-10 11:53:23.347 +01:00 [INF] End processing HTTP request after 2246.075ms - "OK"
+2020-11-10 12:02:51.953 +01:00 [INF] Start processing HTTP request GET "http://172.16.200.172/TAJCentralAuth/api/account/getsupervisorsbybranchcode?branchCode=302080029&appName=Carp"
+2020-11-10 12:02:51.976 +01:00 [INF] Sending HTTP request GET "http://172.16.200.172/TAJCentralAuth/api/account/getsupervisorsbybranchcode?branchCode=302080029&appName=Carp"
+2020-11-10 12:02:54.909 +01:00 [INF] Received HTTP response after 2928.7654ms - "OK"
+2020-11-10 12:02:54.915 +01:00 [INF] End processing HTTP request after 2974.1955ms - "OK"
+2020-11-11 14:27:51.516 +01:00 [FTL] Unable to start Kestrel.
+System.IO.IOException: Failed to bind to address http://127.0.0.1:5000: address already in use.
+ ---> Microsoft.AspNetCore.Connections.AddressInUseException: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+ ---> System.Net.Sockets.SocketException (10048): Only one usage of each socket address (protocol/network address/port) is normally permitted.
+   at System.Net.Sockets.Socket.UpdateStatusAfterSocketErrorAndThrowException(SocketError error, String callerName)
+   at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   at System.Net.Sockets.Socket.Bind(EndPoint localEP)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportFactory.BindAsync(EndPoint endpoint, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServer.<>c__DisplayClass21_0`1.<<StartAsync>g__OnBind|0>d.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context)
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.LocalhostListenOptions.BindAsync(AddressBindContext context)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.AddressesStrategy.BindAsync(AddressBindContext context)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindAsync(IServerAddressesFeature addresses, KestrelServerOptions serverOptions, ILogger logger, Func`2 createBinding)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServer.StartAsync[TContext](IHttpApplication`1 application, CancellationToken cancellationToken)
+2020-11-11 14:28:48.940 +01:00 [FTL] Unable to start Kestrel.
+System.IO.IOException: Failed to bind to address http://127.0.0.1:5000: address already in use.
+ ---> Microsoft.AspNetCore.Connections.AddressInUseException: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+ ---> System.Net.Sockets.SocketException (10048): Only one usage of each socket address (protocol/network address/port) is normally permitted.
+   at System.Net.Sockets.Socket.UpdateStatusAfterSocketErrorAndThrowException(SocketError error, String callerName)
+   at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   at System.Net.Sockets.Socket.Bind(EndPoint localEP)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportFactory.BindAsync(EndPoint endpoint, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServer.<>c__DisplayClass21_0`1.<<StartAsync>g__OnBind|0>d.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context)
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.LocalhostListenOptions.BindAsync(AddressBindContext context)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.AddressesStrategy.BindAsync(AddressBindContext context)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindAsync(IServerAddressesFeature addresses, KestrelServerOptions serverOptions, ILogger logger, Func`2 createBinding)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServer.StartAsync[TContext](IHttpApplication`1 application, CancellationToken cancellationToken)
+2020-11-11 14:32:28.741 +01:00 [INF] Start processing HTTP request GET "http://172.16.200.172/TAJCentralAuth/api/account/getsupervisorsbybranchcode?branchCode=302080029&appName=Carp"
+2020-11-11 14:32:28.767 +01:00 [INF] Sending HTTP request GET "http://172.16.200.172/TAJCentralAuth/api/account/getsupervisorsbybranchcode?branchCode=302080029&appName=Carp"
+2020-11-11 14:32:38.716 +01:00 [INF] Received HTTP response after 9825.1361ms - "OK"
+2020-11-11 14:32:38.724 +01:00 [INF] End processing HTTP request after 9996.3796ms - "OK"
+2020-11-11 14:42:40.255 +01:00 [INF] Start processing HTTP request GET "http://172.16.200.172/TAJCentralAuth/api/account/getsupervisorsbybranchcode?branchCode=302080029&appName=Carp"
+2020-11-11 14:42:40.292 +01:00 [INF] Sending HTTP request GET "http://172.16.200.172/TAJCentralAuth/api/account/getsupervisorsbybranchcode?branchCode=302080029&appName=Carp"
+2020-11-11 14:42:41.819 +01:00 [INF] Received HTTP response after 1521.7981ms - "OK"
+2020-11-11 14:42:41.823 +01:00 [INF] End processing HTTP request after 1588.1356ms - "OK"
+2020-11-11 14:44:18.438 +01:00 [INF] Start processing HTTP request POST "http://172.16.200.172:2303/api/operation/sendemail"
+2020-11-11 14:44:18.438 +01:00 [INF] Sending HTTP request POST "http://172.16.200.172:2303/api/operation/sendemail"
+2020-11-11 14:44:30.069 +01:00 [INF] Received HTTP response after 11630.3076ms - "OK"
+2020-11-11 14:44:30.071 +01:00 [INF] End processing HTTP request after 11633.5947ms - "OK"
+2020-11-11 15:23:10.669 +01:00 [INF] Start processing HTTP request GET "http://172.16.200.172/TAJCentralAuth/api/account/getsupervisorsbybranchcode?branchCode=302080029&appName=Carp"
+2020-11-11 15:23:10.704 +01:00 [INF] Sending HTTP request GET "http://172.16.200.172/TAJCentralAuth/api/account/getsupervisorsbybranchcode?branchCode=302080029&appName=Carp"
+2020-11-11 15:23:11.138 +01:00 [INF] Received HTTP response after 427.8541ms - "OK"
+2020-11-11 15:23:11.142 +01:00 [INF] End processing HTTP request after 488.1945ms - "OK"
+2020-11-11 15:23:11.668 +01:00 [INF] Start processing HTTP request POST "http://172.16.200.172:2303/api/operation/sendemail"
+2020-11-11 15:23:11.669 +01:00 [INF] Sending HTTP request POST "http://172.16.200.172:2303/api/operation/sendemail"
+2020-11-11 15:23:15.603 +01:00 [INF] Received HTTP response after 3934.6774ms - "OK"
+2020-11-11 15:23:15.604 +01:00 [INF] End processing HTTP request after 3935.8216ms - "OK"
+2020-11-11 15:27:47.113 +01:00 [INF] Start processing HTTP request GET "http://172.16.200.172/TAJCentralAuth/api/account/getsupervisorsbybranchcode?branchCode=302080029&appName=Carp"
+2020-11-11 15:27:47.140 +01:00 [INF] Sending HTTP request GET "http://172.16.200.172/TAJCentralAuth/api/account/getsupervisorsbybranchcode?branchCode=302080029&appName=Carp"
+2020-11-11 15:27:47.416 +01:00 [INF] Received HTTP response after 266.9157ms - "OK"
+2020-11-11 15:27:47.420 +01:00 [INF] End processing HTTP request after 321.1596ms - "OK"
+2020-11-11 15:28:25.050 +01:00 [INF] Start processing HTTP request GET "http://172.16.200.172/TAJCentralAuth/api/account/getsupervisorsbybranchcode?branchCode=302080029&appName=Carp"
+2020-11-11 15:28:25.052 +01:00 [INF] Sending HTTP request GET "http://172.16.200.172/TAJCentralAuth/api/account/getsupervisorsbybranchcode?branchCode=302080029&appName=Carp"
+2020-11-11 15:28:25.089 +01:00 [INF] Received HTTP response after 36.8567ms - "OK"
+2020-11-11 15:28:25.090 +01:00 [INF] End processing HTTP request after 39.9394ms - "OK"
+2020-11-11 15:31:55.070 +01:00 [INF] Start processing HTTP request GET "http://172.16.200.172/TAJCentralAuth/api/account/getsupervisorsbybranchcode?branchCode=302080029&appName=Carp"
+2020-11-11 15:31:55.103 +01:00 [INF] Sending HTTP request GET "http://172.16.200.172/TAJCentralAuth/api/account/getsupervisorsbybranchcode?branchCode=302080029&appName=Carp"
+2020-11-11 15:31:55.430 +01:00 [INF] Received HTTP response after 321.3326ms - "OK"
+2020-11-11 15:31:55.434 +01:00 [INF] End processing HTTP request after 379.4179ms - "OK"
+2020-11-11 15:32:30.387 +01:00 [INF] Start processing HTTP request POST "http://172.16.200.172:2303/api/operation/sendemail"
+2020-11-11 15:32:30.388 +01:00 [INF] Sending HTTP request POST "http://172.16.200.172:2303/api/operation/sendemail"
+2020-11-11 15:32:33.636 +01:00 [INF] Received HTTP response after 3248.3845ms - "OK"
+2020-11-11 15:32:33.638 +01:00 [INF] End processing HTTP request after 3251.5244ms - "OK"
+2020-11-17 14:50:01.891 +01:00 [INF] Start processing HTTP request GET "http://172.16.200.172/TAJCentralAuth/api/account/getsupervisorsbybranchcode?branchCode=302080029&appName=Carp"
+2020-11-17 14:50:01.972 +01:00 [INF] Sending HTTP request GET "http://172.16.200.172/TAJCentralAuth/api/account/getsupervisorsbybranchcode?branchCode=302080029&appName=Carp"
+2020-11-17 14:50:14.412 +01:00 [INF] Received HTTP response after 12423.0201ms - "OK"
+2020-11-17 14:50:14.417 +01:00 [INF] End processing HTTP request after 12540.8986ms - "OK"
+2020-11-17 14:51:02.584 +01:00 [INF] Start processing HTTP request POST "http://172.16.200.172:2303/api/operation/sendemail"
+2020-11-17 14:51:02.585 +01:00 [INF] Sending HTTP request POST "http://172.16.200.172:2303/api/operation/sendemail"
+2020-11-17 14:51:10.093 +01:00 [INF] Received HTTP response after 7507.7211ms - "OK"
+2020-11-17 14:51:10.094 +01:00 [INF] End processing HTTP request after 7510.5658ms - "OK"
+2020-11-17 15:38:46.598 +01:00 [INF] Start processing HTTP request GET "http://172.16.200.172/TAJCentralAuth/api/account/getsupervisorsbybranchcode?branchCode=30201&appName=Carp"
+2020-11-17 15:38:46.626 +01:00 [INF] Sending HTTP request GET "http://172.16.200.172/TAJCentralAuth/api/account/getsupervisorsbybranchcode?branchCode=30201&appName=Carp"
+2020-11-17 15:38:48.799 +01:00 [INF] Received HTTP response after 2164.8298ms - "OK"
+2020-11-17 15:38:48.804 +01:00 [INF] End processing HTTP request after 2221.6894ms - "OK"
+2020-11-17 15:43:13.185 +01:00 [INF] Start processing HTTP request GET "http://172.16.200.172/TAJCentralAuth/api/account/getsupervisorsbybranchcode?branchCode=30201&appName=customs"
+2020-11-17 15:43:13.215 +01:00 [INF] Sending HTTP request GET "http://172.16.200.172/TAJCentralAuth/api/account/getsupervisorsbybranchcode?branchCode=30201&appName=customs"
+2020-11-17 15:43:17.851 +01:00 [INF] Received HTTP response after 4516.8352ms - "OK"
+2020-11-17 15:43:17.855 +01:00 [INF] End processing HTTP request after 4685.9549ms - "OK"
+2020-11-17 15:45:28.728 +01:00 [INF] Start processing HTTP request GET "http://172.16.200.172/TAJCentralAuth/api/account/getsupervisorsbybranchcode?branchCode=30201&appName=CARP"
+2020-11-17 15:45:28.761 +01:00 [INF] Sending HTTP request GET "http://172.16.200.172/TAJCentralAuth/api/account/getsupervisorsbybranchcode?branchCode=30201&appName=CARP"
+2020-11-17 15:45:29.048 +01:00 [INF] Received HTTP response after 279.6606ms - "OK"
+2020-11-17 15:45:29.050 +01:00 [INF] End processing HTTP request after 333.7745ms - "OK"
+2020-11-17 15:49:24.196 +01:00 [INF] Start processing HTTP request GET "http://172.16.200.172/TAJCentralAuth/api/account/getsupervisorsbybranchcode?branchCode=302080029&appName=CARP"
+2020-11-17 15:49:24.229 +01:00 [INF] Sending HTTP request GET "http://172.16.200.172/TAJCentralAuth/api/account/getsupervisorsbybranchcode?branchCode=302080029&appName=CARP"
+2020-11-17 15:49:26.246 +01:00 [INF] Received HTTP response after 2010.1481ms - "OK"
+2020-11-17 15:49:26.250 +01:00 [INF] End processing HTTP request after 2070.8652ms - "OK"
+2020-11-17 15:50:18.197 +01:00 [INF] Start processing HTTP request POST "http://172.16.200.172:2303/api/operation/sendemail"
+2020-11-17 15:50:18.198 +01:00 [INF] Sending HTTP request POST "http://172.16.200.172:2303/api/operation/sendemail"
+2020-11-17 15:50:25.133 +01:00 [INF] Received HTTP response after 6934.8308ms - "OK"
+2020-11-17 15:50:25.134 +01:00 [INF] End processing HTTP request after 6938.58ms - "OK"
+2020-11-17 15:57:27.102 +01:00 [INF] Start processing HTTP request GET "http://172.16.200.172/TAJCentralAuth/api/account/getsupervisorsbybranchcode?branchCode=302080029&appName=CARP"
+2020-11-17 15:57:27.102 +01:00 [INF] Sending HTTP request GET "http://172.16.200.172/TAJCentralAuth/api/account/getsupervisorsbybranchcode?branchCode=302080029&appName=CARP"
+2020-11-17 15:57:27.267 +01:00 [INF] Received HTTP response after 164.693ms - "OK"
+2020-11-17 15:57:27.268 +01:00 [INF] End processing HTTP request after 166.0042ms - "OK"
+2020-11-17 15:57:27.292 +01:00 [INF] Start processing HTTP request POST "http://172.16.200.172:2303/api/operation/sendemail"
+2020-11-17 15:57:27.292 +01:00 [INF] Sending HTTP request POST "http://172.16.200.172:2303/api/operation/sendemail"
+2020-11-17 15:57:34.663 +01:00 [INF] Received HTTP response after 7370.6421ms - "OK"
+2020-11-17 15:57:34.664 +01:00 [INF] End processing HTTP request after 7372.072ms - "OK"
+2020-11-26 16:41:25.792 +01:00 [INF] Attempting name enquiry @ 26/11/2020 16:41:25 for Account number : 0000495359
+2020-11-26 16:41:26.306 +01:00 [INF] Name Enquiry payload {"Account":"0000495359"}
+2020-11-26 16:41:26.323 +01:00 [INF] Sending request name enquiry for account number 0000495359 to http://172.19.11.32:8065//api//General//IntraBankNameInquiry 
+2020-11-26 16:41:26.352 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-11-26 16:41:26.362 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-11-26 16:41:30.780 +01:00 [INF] Received HTTP response after 4411.2808ms - "OK"
+2020-11-26 16:41:30.788 +01:00 [INF] End processing HTTP request after 4449.9185ms - "OK"
+2020-11-26 16:41:30.869 +01:00 [INF] Name Enquiry succeeded for account number 0000495359, response object NCSApi.Contract.NameEnquiryResponse 
+2020-11-26 16:42:02.409 +01:00 [INF] Attempting name enquiry @ 26/11/2020 16:42:02 for Account number : 0000495373
+2020-11-26 16:42:02.410 +01:00 [INF] Name Enquiry payload {"Account":"0000495373"}
+2020-11-26 16:42:02.432 +01:00 [INF] Sending request name enquiry for account number 0000495373 to http://172.19.11.32:8065//api//General//IntraBankNameInquiry 
+2020-11-26 16:42:02.433 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-11-26 16:42:02.433 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-11-26 16:42:02.702 +01:00 [INF] Received HTTP response after 268.2415ms - "OK"
+2020-11-26 16:42:02.704 +01:00 [INF] End processing HTTP request after 270.4917ms - "OK"
+2020-11-26 16:42:02.706 +01:00 [INF] Name Enquiry succeeded for account number 0000495373, response object NCSApi.Contract.NameEnquiryResponse 
+2020-11-26 16:43:55.483 +01:00 [INF] Attempting name enquiry @ 26/11/2020 16:43:55 for Account number : 0000006382
+2020-11-26 16:43:55.484 +01:00 [INF] Name Enquiry payload {"Account":"0000006382"}
+2020-11-26 16:43:55.486 +01:00 [INF] Sending request name enquiry for account number 0000006382 to http://172.19.11.32:8065//api//General//IntraBankNameInquiry 
+2020-11-26 16:43:55.487 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-11-26 16:43:55.488 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-11-26 16:43:56.822 +01:00 [INF] Received HTTP response after 1333.9238ms - "OK"
+2020-11-26 16:43:56.823 +01:00 [INF] End processing HTTP request after 1336.6676ms - "OK"
+2020-11-26 16:43:56.829 +01:00 [INF] Name Enquiry succeeded for account number 0000006382, response object NCSApi.Contract.NameEnquiryResponse 
+2020-11-26 16:49:18.685 +01:00 [INF] Attempting name enquiry @ 26/11/2020 16:49:18 for Account number : 0000006382
+2020-11-26 16:49:19.089 +01:00 [INF] Name Enquiry payload {"Account":"0000006382"}
+2020-11-26 16:49:19.094 +01:00 [INF] Sending request name enquiry for account number 0000006382 to http://172.19.11.32:8065//api//General//IntraBankNameInquiry 
+2020-11-26 16:49:19.126 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-11-26 16:49:19.137 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2020-11-26 16:49:19.559 +01:00 [INF] Received HTTP response after 414.2632ms - "OK"
+2020-11-26 16:49:19.562 +01:00 [INF] End processing HTTP request after 458.5996ms - "OK"
+2020-11-26 16:49:19.664 +01:00 [INF] Name Enquiry succeeded for account number 0000006382, response object {"ResponseMessage":"Successful","ResponseDescription":"Request Successful","response":{"AccountName":"OLAYINKA OLUSHOLA IBIDUNNI"}} 
+2020-11-30 10:49:20.927 +01:00 [ERR] An unhandled exception has occurred while executing the request.
+Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Ambiguous HTTP method for action - NCSApi.Controllers.OtherServicesController.SendMail (NCSApi). Actions require an explicit HttpMethod binding for Swagger/OpenAPI 3.0
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperations(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePaths(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwagger(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2020-11-30 14:39:09.120 +01:00 [INF] Start processing HTTP request POST "http://172.16.200.172:2303/api/operation/sendemailwithattachment"
+2020-11-30 14:39:09.177 +01:00 [INF] Sending HTTP request POST "http://172.16.200.172:2303/api/operation/sendemailwithattachment"
+2020-11-30 14:39:17.800 +01:00 [INF] Received HTTP response after 8615.8707ms - "BadRequest"
+2020-11-30 14:39:17.804 +01:00 [INF] End processing HTTP request after 8708.0839ms - "BadRequest"
+2020-11-30 14:45:51.151 +01:00 [INF] Start processing HTTP request POST "http://172.16.200.172:2303/api/operation/sendemailwithattachment"
+2020-11-30 14:45:51.186 +01:00 [INF] Sending HTTP request POST "http://172.16.200.172:2303/api/operation/sendemailwithattachment"
+2020-11-30 14:45:51.654 +01:00 [INF] Received HTTP response after 460.9869ms - "BadRequest"
+2020-11-30 14:45:51.658 +01:00 [INF] End processing HTTP request after 521.6287ms - "BadRequest"
+2020-11-30 14:52:52.997 +01:00 [INF] Start processing HTTP request POST "http://172.16.200.172:2303/api/operation/sendemailwithattachment"
+2020-11-30 14:52:53.032 +01:00 [INF] Sending HTTP request POST "http://172.16.200.172:2303/api/operation/sendemailwithattachment"
+2020-11-30 14:52:53.563 +01:00 [INF] Received HTTP response after 526.031ms - "BadRequest"
+2020-11-30 14:52:53.566 +01:00 [INF] End processing HTTP request after 582.4803ms - "BadRequest"
+2020-11-30 15:30:38.216 +01:00 [ERR] An unhandled exception has occurred while executing the request.
+System.IO.FileNotFoundException: Could not find file 'C:\Users\TAJ174\source\repos\NCSApi\NCSApi\new2.xml'.
+File name: 'C:\Users\TAJ174\source\repos\NCSApi\NCSApi\new2.xml'
+   at System.IO.FileStream.ValidateFileHandle(SafeFileHandle fileHandle)
+   at System.IO.FileStream.CreateFileOpenHandle(FileMode mode, FileShare share, FileOptions options)
+   at System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, FileOptions options)
+   at System.IO.File.ReadAllBytesAsync(String path, CancellationToken cancellationToken)
+   at NCSApi.Controllers.OtherServicesController.SendMail(EmailCustomerRequest model) in C:\Users\taj174\source\repos\NCSApi\NCSApi\Controllers\OtherServicesController.cs:line 106
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2020-11-30 16:02:19.227 +01:00 [INF] Start processing HTTP request POST "http://172.16.200.172:2303/api/operation/sendemailwithattachment"
+2020-11-30 16:02:19.262 +01:00 [INF] Sending HTTP request POST "http://172.16.200.172:2303/api/operation/sendemailwithattachment"
+2020-11-30 16:02:25.169 +01:00 [INF] Received HTTP response after 5902.0155ms - "BadRequest"
+2020-11-30 16:02:25.172 +01:00 [INF] End processing HTTP request after 5959.8923ms - "BadRequest"
+2020-11-30 16:05:32.255 +01:00 [INF] Start processing HTTP request POST "http://172.16.200.172:2303/api/operation/sendemailwithattachment"
+2020-11-30 16:05:32.283 +01:00 [INF] Sending HTTP request POST "http://172.16.200.172:2303/api/operation/sendemailwithattachment"
+2020-11-30 16:05:33.942 +01:00 [INF] Received HTTP response after 1653.9775ms - "BadRequest"
+2020-11-30 16:05:33.945 +01:00 [INF] End processing HTTP request after 1705.0285ms - "BadRequest"
+2020-11-30 16:30:43.625 +01:00 [INF] Start processing HTTP request POST "http://172.16.200.172:2303/api/operation/sendemailwithattachment"
+2020-11-30 16:30:43.626 +01:00 [INF] Sending HTTP request POST "http://172.16.200.172:2303/api/operation/sendemailwithattachment"
+2020-11-30 16:30:50.956 +01:00 [INF] Received HTTP response after 7329.4043ms - "OK"
+2020-11-30 16:30:50.958 +01:00 [INF] End processing HTTP request after 7333.3525ms - "OK"
+2020-11-30 16:31:12.071 +01:00 [INF] Start processing HTTP request POST "http://172.16.200.172:2303/api/operation/sendemailwithattachment"
+2020-11-30 16:31:12.072 +01:00 [INF] Sending HTTP request POST "http://172.16.200.172:2303/api/operation/sendemailwithattachment"
+2020-11-30 16:31:15.228 +01:00 [INF] Received HTTP response after 3156.2189ms - "OK"
+2020-11-30 16:31:15.229 +01:00 [INF] End processing HTTP request after 3158.8097ms - "OK"
+2020-11-30 16:31:48.702 +01:00 [INF] Start processing HTTP request POST "http://172.16.200.172:2303/api/operation/sendemailwithattachment"
+2020-11-30 16:31:48.704 +01:00 [INF] Sending HTTP request POST "http://172.16.200.172:2303/api/operation/sendemailwithattachment"
+2020-11-30 16:31:52.125 +01:00 [INF] Received HTTP response after 3420.9533ms - "OK"
+2020-11-30 16:31:52.125 +01:00 [INF] End processing HTTP request after 3423.3619ms - "OK"
+2020-11-30 16:32:10.313 +01:00 [INF] Start processing HTTP request POST "http://172.16.200.172:2303/api/operation/sendemailwithattachment"
+2020-11-30 16:32:10.314 +01:00 [INF] Sending HTTP request POST "http://172.16.200.172:2303/api/operation/sendemailwithattachment"
+2020-11-30 16:32:13.356 +01:00 [INF] Received HTTP response after 3041.3253ms - "OK"
+2020-11-30 16:32:13.357 +01:00 [INF] End processing HTTP request after 3043.3206ms - "OK"
+2020-11-30 16:55:55.433 +01:00 [INF] Attemping to send receipt to customer: teslimbakare@live.com
+2020-11-30 16:55:55.984 +01:00 [INF] request form details: [{"Headers":[{"Key":"Content-Type","Value":["multipart/form-data"]},{"Key":"Content-Disposition","Value":["form-data; name=Attachments; filename=new2.xml; filename*=utf-8''new2.xml"]}]},{"Headers":[{"Key":"Content-Type","Value":["text/plain; charset=utf-8"]},{"Key":"Content-Disposition","Value":["form-data; name=ToAddress"]}]},{"Headers":[{"Key":"Content-Type","Value":["text/plain; charset=utf-8"]},{"Key":"Content-Disposition","Value":["form-data; name=Subject"]}]},{"Headers":[{"Key":"Content-Type","Value":["text/plain; charset=utf-8"]},{"Key":"Content-Disposition","Value":["form-data; name=Bcc"]}]},{"Headers":[{"Key":"Content-Type","Value":["text/plain; charset=utf-8"]},{"Key":"Content-Disposition","Value":["form-data; name=Cc"]}]},{"Headers":[{"Key":"Content-Type","Value":["text/plain; charset=utf-8"]},{"Key":"Content-Disposition","Value":["form-data; name=MessageBody"]}]}]
+2020-11-30 16:55:55.985 +01:00 [INF] Emailing receipt to customer: teslimbakare@live.com
+2020-11-30 16:55:56.012 +01:00 [INF] Start processing HTTP request POST "http://172.16.200.172:2303/api/operation/sendemailwithattachment"
+2020-11-30 16:55:56.035 +01:00 [INF] Sending HTTP request POST "http://172.16.200.172:2303/api/operation/sendemailwithattachment"
+2020-11-30 16:56:03.940 +01:00 [INF] Received HTTP response after 7897.1434ms - "OK"
+2020-11-30 16:56:03.947 +01:00 [INF] End processing HTTP request after 7954.6048ms - "OK"
+2020-11-30 16:56:03.966 +01:00 [INF] Email sent to customer with message: successful 
+2020-12-01 09:18:36.228 +01:00 [INF] Attempting accounting detail @ 01/12/2020 09:18:36 for Account number : 0000495359
+2020-12-01 09:18:36.595 +01:00 [INF] Account Detail request object {"Account":"0000495359"}
+2020-12-01 09:18:37.182 +01:00 [INF] An error occured while attemting to get detail for account number 0000495359 error detail: System.UriFormatException: Invalid URI: Invalid port specified.
+   at System.Uri.CreateThis(String uri, Boolean dontEscape, UriKind uriKind)
+   at System.Uri..ctor(String uriString)
+   at NCSApi.Controllers.OtherServicesController.FindAccountDetail(String AccountNumber) in C:\Users\taj174\source\repos\NCSApi\NCSApi\Controllers\OtherServicesController.cs:line 153
+2020-12-01 09:22:47.585 +01:00 [INF] Attempting accounting detail @ 01/12/2020 09:22:47 for Account number : 0000495359
+2020-12-01 09:22:47.964 +01:00 [INF] Account Detail request object {"Account":"0000495359"}
+2020-12-01 09:22:47.975 +01:00 [INF] sending Account Detail request for account number 0000495359 to http://172.19.11.32:8065//api//General//IntraBankNameInquiry 
+2020-12-01 09:22:48.003 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065/api/General/AccountDetails"
+2020-12-01 09:22:48.013 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065/api/General/AccountDetails"
+2020-12-01 09:22:48.551 +01:00 [INF] Received HTTP response after 532.493ms - "OK"
+2020-12-01 09:22:48.556 +01:00 [INF] End processing HTTP request after 567.0268ms - "OK"
+2020-12-01 09:22:48.628 +01:00 [INF] Account Detail  for account number 0000495359, response object {"ResponseMessage":"Failed","ResponseDescription":"Unable to get Account details"} 
+2020-12-01 09:28:38.695 +01:00 [ERR] An unhandled exception has occurred while executing the request.
+Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Ambiguous HTTP method for action - NCSApi.Controllers.OtherServicesController.FindAccountDetail (NCSApi). Actions require an explicit HttpMethod binding for Swagger/OpenAPI 3.0
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperations(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePaths(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwagger(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2020-12-01 09:29:32.823 +01:00 [ERR] An unhandled exception has occurred while executing the request.
+Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Ambiguous HTTP method for action - NCSApi.Controllers.OtherServicesController.FindAccountDetail (NCSApi). Actions require an explicit HttpMethod binding for Swagger/OpenAPI 3.0
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperations(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePaths(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwagger(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2020-12-01 09:31:20.007 +01:00 [INF] Attempting accounting detail @ 01/12/2020 09:31:20 for Account number : 0000002456
+2020-12-01 09:31:20.368 +01:00 [INF] Account Detail request object {"Account":"0000002456"}
+2020-12-01 09:31:20.376 +01:00 [INF] sending Account Detail request for account number 0000002456 to http://172.19.11.32:8065//api//General//IntraBankNameInquiry 
+2020-12-01 09:31:20.408 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065/api/General/AccountDetails"
+2020-12-01 09:31:20.418 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065/api/General/AccountDetails"
+2020-12-01 09:31:24.848 +01:00 [INF] Received HTTP response after 4423.3619ms - "OK"
+2020-12-01 09:31:24.853 +01:00 [INF] End processing HTTP request after 4468.9314ms - "OK"
+2020-12-01 09:31:24.970 +01:00 [INF] Account Detail  for account number 0000002456, response object {"ResponseMessage":"Successful","ResponseDescription":"Request SuccessFul","Response":{"CustomerID":"000000032","AccountName":"MUSTAPHA MUHAMMAD ABUBAKAR","BranchCode":"00001","BranchName":"HEAD OFFICE","Currency":"NGN","AvailableBalance":80670.45,"ReservedAmount":0.0,"BVN":null,"IsClosed":"N","AccountOpenDate":"2019-10-03T00:00:00+01:00","CreatedBy":"OOP0015","IBAN":"22","IsJointAccount":"N","Email":"MUSTYCAPTAIN@HOTMAIL.COM","Phone":"08064741104","ProductCode":"431","ProductDesc":"TAJ STAFF SALARY ACCOUNT","AccountStatus":"UnRestricted"}} 
+2020-12-01 09:32:17.290 +01:00 [INF] Attempting accounting detail @ 01/12/2020 09:32:17 for Account number : 0000023880
+2020-12-01 09:32:17.291 +01:00 [INF] Account Detail request object {"Account":"0000023880"}
+2020-12-01 09:32:17.291 +01:00 [INF] sending Account Detail request for account number 0000023880 to http://172.19.11.32:8065//api//General//IntraBankNameInquiry 
+2020-12-01 09:32:17.292 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065/api/General/AccountDetails"
+2020-12-01 09:32:17.292 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065/api/General/AccountDetails"
+2020-12-01 09:32:19.553 +01:00 [INF] Received HTTP response after 2260.4538ms - "OK"
+2020-12-01 09:32:19.554 +01:00 [INF] End processing HTTP request after 2262.725ms - "OK"
+2020-12-01 09:32:19.557 +01:00 [INF] Account Detail  for account number 0000023880, response object {"ResponseMessage":"Successful","ResponseDescription":"Request SuccessFul","Response":{"CustomerID":"000001860","AccountName":"MUHAMMAD FARUK","BranchCode":"00001","BranchName":"HEAD OFFICE","Currency":"NGN","AvailableBalance":5856.37,"ReservedAmount":0.0,"BVN":null,"IsClosed":"N","AccountOpenDate":"2020-01-08T00:00:00+01:00","CreatedBy":"ROP0039","IBAN":"08","IsJointAccount":"N","Email":"","Phone":"08132515161","ProductCode":"361","ProductDesc":"TAJ STAFF SAVINGS QARD","AccountStatus":"UnRestricted"}} 
+2020-12-01 09:56:01.777 +01:00 [INF] Attempting accounting detail @ 01/12/2020 09:56:01 for Account number : 0000023880
+2020-12-01 09:56:02.108 +01:00 [INF] Account Detail request object {"Account":"0000023880"}
+2020-12-01 09:56:02.120 +01:00 [INF] sending Account Detail request for account number 0000023880 to http://172.19.11.32:8065//api//General//IntraBankNameInquiry 
+2020-12-01 09:56:02.144 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065/api/General/AccountDetails"
+2020-12-01 09:56:02.158 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065/api/General/AccountDetails"
+2020-12-01 09:56:03.221 +01:00 [INF] Received HTTP response after 1056.7324ms - "OK"
+2020-12-01 09:56:03.227 +01:00 [INF] End processing HTTP request after 1097.1829ms - "OK"
+2020-12-01 09:56:03.348 +01:00 [INF] Account Detail  for account number 0000023880, response object {"ResponseMessage":"Successful","ResponseDescription":"Request SuccessFul","Response":{"CustomerID":"000001860","AccountName":"MUHAMMAD FARUK","BranchCode":"00001","BranchName":"HEAD OFFICE","Currency":"NGN","AvailableBalance":5856.37,"ReservedAmount":0.0,"BVN":null,"IsClosed":"N","AccountOpenDate":"2020-01-08T00:00:00+01:00","CreatedBy":"ROP0039","IBAN":"08","IsJointAccount":"N","Email":"","Phone":"08132515161","ProductCode":"361","ProductDesc":"TAJ STAFF SAVINGS QARD","AccountStatus":"UnRestricted"}} 
+2020-12-01 10:01:48.477 +01:00 [INF] Attempting accounting detail @ 01/12/2020 10:01:48 for Account number : 0000023880
+2020-12-01 10:01:48.927 +01:00 [INF] Account Detail request object {"Account":"0000023880"}
+2020-12-01 10:01:48.934 +01:00 [INF] sending Account Detail request for account number 0000023880 to http://172.19.11.32:8065//api//General//IntraBankNameInquiry 
+2020-12-01 10:02:37.755 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065/api/General/AccountDetails"
+2020-12-01 10:02:37.762 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065/api/General/AccountDetails"
+2020-12-01 10:02:38.836 +01:00 [INF] Received HTTP response after 1068.36ms - "OK"
+2020-12-01 10:02:38.843 +01:00 [INF] End processing HTTP request after 1101.171ms - "OK"
+2020-12-01 10:02:51.081 +01:00 [INF] Account Detail  for account number 0000023880, response object {"ResponseMessage":"Successful","ResponseDescription":"Request SuccessFul","Response":{"CustomerID":"000001860","AccountName":"MUHAMMAD FARUK","BranchCode":"00001","BranchName":"HEAD OFFICE","Currency":"NGN","AvailableBalance":5856.37,"ReservedAmount":0.0,"BVN":null,"IsClosed":"N","AccountOpenDate":"2020-01-08T00:00:00+01:00","CreatedBy":"ROP0039","IBAN":"08","IsJointAccount":"N","Email":"","Phone":"08132515161","ProductCode":"361","ProductDesc":"TAJ STAFF SAVINGS QARD","AccountStatus":"UnRestricted"}} 
+2020-12-02 14:18:19.774 +01:00 [INF] Attempting accounting detail @ 02/12/2020 14:18:19 for Account number : 0000006380
+2020-12-02 14:18:19.986 +01:00 [INF] Account Detail request object {"Account":"0000006380"}
+2020-12-02 14:18:19.989 +01:00 [INF] sending Account Detail request for account number 0000006380 to http://172.19.11.32:8065//api//General//IntraBankNameInquiry 
+2020-12-02 14:18:23.739 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065/api/General/AccountDetails"
+2020-12-02 14:18:23.746 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065/api/General/AccountDetails"
+2020-12-02 14:18:23.982 +01:00 [INF] Received HTTP response after 229.7666ms - "OK"
+2020-12-02 14:18:23.988 +01:00 [INF] End processing HTTP request after 261.0867ms - "OK"
+2020-12-02 14:18:24.042 +01:00 [INF] Account Detail  for account number 0000006380, response object {"ResponseMessage":"Failed","ResponseDescription":"Unable to get Account details"} 

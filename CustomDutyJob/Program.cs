@@ -250,7 +250,7 @@ namespace CustomDutyJob
             {
                 foreach (XmlNode node in taxes)
                 {
-                    Tax newTax = new Tax { AssessmentId = AssessmentId, TaxAmount = node["TaxAmount"].InnerText, TaxCode = node["TaxCode"].InnerText };
+                    Tax newTax = new Tax { AssessmentId = AssessmentId, TaxAmount = node["TaxAmount"].InnerText, TaxCode = node["TaxCode"].InnerText, DateCreated = DateTime.Now };
                     cust.Tax.Add(newTax);
                     cust.SaveChanges();
                 }
@@ -266,7 +266,6 @@ namespace CustomDutyJob
                 context.SaveChanges();
             }
         }
-
     }
 
     class cleaner
@@ -274,7 +273,6 @@ namespace CustomDutyJob
         public static void DeleteFile(string folderPath)
         {
             DirectoryInfo all = new DirectoryInfo(folderPath);
-
 
             foreach (FileInfo file in all.GetFiles())
             {
@@ -286,7 +284,7 @@ namespace CustomDutyJob
 
             //    all.Delete(true);
             //    string pathString2 = @"C:\tosser\inout\callback";
-            //System.IO.Directory.CreateDirectory(pathString2) ;
+            //System.IO.Directory.CreateDirectory(pathString2);
 
         }
     }

@@ -23,7 +23,9 @@ namespace NCSApi.Contract
 		public string FormMNumber { get; set; }
 		public string AssessmentType { get; set; }
 
-		public List<Tax> Taxes { get; set; }		
+		public string AttachmentUrl { get; set; }
+
+		public List<TaxResponse> Taxes { get; set; }		
 		public string TotalAmountToBePaid { get; set; }	
 		public string Version { get; set; }
 	}

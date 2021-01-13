@@ -18,6 +18,9 @@ using NCSApi.Service;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using DataLayer;
+using System.IO;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.AspNetCore.Http;
 
 namespace NCSApi
 {
@@ -43,18 +46,20 @@ namespace NCSApi
 
 
             services.AddSingleton(_dutyConfig);
-            services.AddSingleton(new CustomContext());
+            services.AddSingleton(new CustomContext());           
             services.AddAutoMapper(typeof(Startup));
             services.AddHttpClient<ICustomDutyClient, CustomDutyClientService>();
-           // services.AddSingleton(_settings);
+            // services.AddSingleton(_settings);
             //services.AddSingleton(new CustomContext());
 
-            services.AddDbContext<CustomContext>(opt =>
-            {
-                opt.UseSqlServer(Configuration["ConnetionString:DefaultConnection"]);
-            });
+            //services.AddDbContext<CustomContext>(opt =>
+            //{
+            //    opt.UseSqlServer(Configuration["ConnetionString:DefaultConnection"]);
+            //});
 
             //services.Configure<Settings>(Configuration.GetSection("ConnectonString"));
+
+            //services.AddCors();
 
             services.AddSwaggerGen(c =>
             {
@@ -97,12 +102,18 @@ namespace NCSApi
             app.UseRouting();
 
             app.UseAuthorization();
-            app.UseStaticFiles();
-            app.UseCors(builder => builder.AllowAnyOrigin()
-             .AllowAnyHeader()
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Assessment_Attachment")),
+                RequestPath = new PathString("/Assessment_Attachment")
+            });
+            app.UseCors(builder =>
+            builder.AllowAnyOrigin()
              .AllowAnyMethod()
-            // .AllowCredentials()
+             .AllowAnyHeader()
             );
+         
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

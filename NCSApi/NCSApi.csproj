@@ -33,6 +33,7 @@
 
   <ItemGroup>
     <Folder Include="logging\" />
+    <Folder Include="Assessment_Attachment\" />
   </ItemGroup>
 
 

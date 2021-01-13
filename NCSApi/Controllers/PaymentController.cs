@@ -4,15 +4,20 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Security.Cryptography.Xml;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using AutoMapper;
 using DataLayer;
 using DataLayer.Data;
 using DataLayer.DataContext;
+using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -28,6 +33,7 @@ using Serilog;
 
 namespace NCSApi.Controllers
 {
+   
     [Route("api/[controller]")]
     [ApiController]
     public class PaymentController : ControllerBase
@@ -36,24 +42,26 @@ namespace NCSApi.Controllers
         readonly DutyConfig _dutyConfig;
         readonly CustomContext _context;
         Random _random = new Random();
+        readonly IMapper _mapper;
+        readonly OpService _opService;
 
-
-
-        public PaymentController(ICustomDutyClient client, DutyConfig dutyConfig, CustomContext context)
+        public PaymentController(ICustomDutyClient client, DutyConfig dutyConfig, CustomContext context, IMapper mapper)
         {
 
             _client = client;
             _dutyConfig = dutyConfig;
             _context = context;
+            _mapper = mapper;
+            _opService = new OpService(_dutyConfig, _client);
         }
 
         // GET: api/<PaymentController>
-        [HttpGet]
+        [HttpGet()]
         //[Produces("application/json")]
         [Route("process/{PaymentReference}")]
         public async Task<IActionResult> Get(string PaymentReference)
-        {
-            //if (string.IsNullOrEmpty(PaymentReference)) return BadRequest(new { status = HttpStatusCode.BadRequest, Message = "Payment Reference is required" });
+        {           
+          
             try
             {
                 var getPaymentLog = await _context.Payment.Where(x => x.PaymentReference.Equals(PaymentReference)).FirstOrDefaultAsync();
@@ -61,7 +69,6 @@ namespace NCSApi.Controllers
 
                 Assessment getNotificaton = await _context.Assessment.FindAsync(Guid.Parse(getPaymentLog.AssessmentId));
                 if (getNotificaton == null) return BadRequest(new { status = HttpStatusCode.BadRequest, Message = "Assessment Notification not found" });
-
 
                 var msg = new { Account = getPaymentLog.CustomerAccount };
                 string formatBaseUrl = _dutyConfig.BaseUrl;
@@ -78,38 +85,34 @@ namespace NCSApi.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     string assessmentType = Enum.GetName(typeof(AssessmentTypes), getNotificaton.AssessmentTypeId);
-
-                    // int retry = 5;
-                    // bool responseRecieve = false;
+                 
                     string content = await response.Content.ReadAsStringAsync();
-                    bool suspenseIsCredited = await CreditSuspense(getPaymentLog.Amount, getPaymentLog.CustomerAccount, PaymentReference);
+                    bool tillIsCredited = await CreditTillAccount(getPaymentLog.Amount, getPaymentLog.CustomerAccount, PaymentReference);
 
-                    if (suspenseIsCredited)
+                    if (tillIsCredited)
                     {
                         string xmlBuilder = PaymentTypeFinder(assessmentType, getPaymentLog, getNotificaton);
                         string xmlSavePath = assessmentType == "Excise" ? _dutyConfig.ExcisePaymentPath : @"C:\tosser\inout\in\";
                         XmlDocument xDoc = new XmlDocument();
-                        xDoc.LoadXml(xmlBuilder);
-                        //xDoc.Save(Path.Combine(@"C:\tosser\inout\out\", $"{DateTime.Now.Ticks}.xml"));
+                        xDoc.LoadXml(xmlBuilder);                 
                         xDoc.Save(Path.Combine(xmlSavePath, $"{assessmentType}_{DateTime.Now.Ticks}.xml"));
 
-                        //bool _responseReceived = false;                      
-
-                        PaymentResponseFinder(getPaymentLog, out bool _responseReceived, out string Message, assessmentType);
+                        PaymentResponseFinder(getPaymentLog, out bool _responseReceived, out string Message, assessmentType, out string POCIsCredit, out string VATIsCredit);
                         if (_responseReceived)
-                        {
-                            return Ok(new { Status = HttpStatusCode.OK, Message = $"Transaction completed: NCS Message - {Message}" });
+                        {                            
+                            return Ok(new { Status = HttpStatusCode.OK, Message = "Request Successful",
+                            data = new { NCSResponse =  Message, POSAccountStatus = POCIsCredit, VATAccountStatus = VATIsCredit} });
                         }
                         else
                         {
                             ProcessNCSError(getPaymentLog.Id, out bool errConfirm, out string ErrorMessage);
-
                             if (errConfirm)
                             {
                                 cleaner.DeleteFile(@"C:\tosser\inout\err");
                                 return Ok(new { Status = HttpStatusCode.OK, Message = ErrorMessage });
                             }
                         }
+
                         getPaymentLog.StatusId = (int)TransactionStatus.Completed;
                         getPaymentLog.TransactionStatusId = (int)TransactionStatus.Pending;
                         _context.Update(getPaymentLog);
@@ -128,15 +131,19 @@ namespace NCSApi.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost()]
         //[Produces("application/json")]
         [Route("initiate")]
-        public async Task<IActionResult> LogPayment([FromBody] DutyPaymentRequest model)
+        public async Task<IActionResult> LogPayment([FromForm] DutyPaymentRequest model)
         {
+           // newPaymentLog = null;
             //if (!ModelState.IsValid)
             //    return BadRequest(new { status = HttpStatusCode.BadRequest, Message = "One or more validation failed" });
             try
             {
+
+               //PaymentLog existingPaymentLog = await _context.Payment.FirstOrDefaultAsync(x => x.AssessmentId.Equals(model.AssessmentId));               
+                
                 var newPaymentLog = new PaymentLog
                 {
                     CustomerAccount = model.CustomerAccount,
@@ -149,14 +156,47 @@ namespace NCSApi.Controllers
 
                 };
 
+                string ImageFullPath = string.Empty;
+
+                if (Request.Form.Files.Any())
+                {
+                    var file = Request.Form.Files[0];
+                    var folderName = Path.Combine("Assessment_Attachment");
+                    var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+
+                    if (file.Length > 0)
+                    {
+                        var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                        fileName = $"{DateTime.Now.Ticks}{fileName}";
+                        var fullPath = Path.Combine(pathToSave, fileName);
+                        var dbPath = Path.Combine(folderName, fileName);
+
+                        ImageFullPath = $"{_dutyConfig.CustomDutyApiUrl}{fileName}";
+
+                        using (var stream = new FileStream(fullPath, FileMode.Create))
+                        {
+                            file.CopyTo(stream);
+                        }                        
+                    }
+                }
+             
                 _context.Payment.Add(newPaymentLog);
                 int added = await _context.SaveChangesAsync();
 
                 if (added == 1)
-                {
+                { 
+                   
+                    Assessment assessmentToUpdate = await _context.Assessment.FindAsync(Guid.Parse(model.AssessmentId));
+                    assessmentToUpdate.AttachmentPath = ImageFullPath;
+
+                    _opService.GetStaffDetail(assessmentToUpdate.BankBranchCode, "CARP", out string SupervisorMail, out string SupevisorName);
+                    _opService.SendMailToSupervisor(SupervisorMail, SupevisorName, assessmentToUpdate.Id.ToString(), out string Message);
+
+                    _context.Update(assessmentToUpdate);
+                    await _context.SaveChangesAsync();
+
                     return Ok(new { HttpStatusCode.OK, Message = "Request completed", Data = new { PaymentReference = newPaymentLog.PaymentReference, PaymentId = newPaymentLog.Id } });
                 }
-
                 return BadRequest(new { HttpStatusCode.BadRequest, Message = "Request Unsuccessful" });
             }
 
@@ -167,13 +207,14 @@ namespace NCSApi.Controllers
         }
 
 
-        [HttpPut]
-        [Route("accept/{PaymentReference}")]
-        public async Task<IActionResult> thisAss(string PaymentReference)
+
+        [HttpPost]        
+        [Route("accept")]
+        public async Task<IActionResult> thisAss([FromBody]DeclineRequest model)
         {
             try
             {
-                PaymentLog getAss = await _context.Payment.Where(x => x.PaymentReference == PaymentReference).FirstOrDefaultAsync();
+                PaymentLog getAss = await _context.Payment.Where(x => x.PaymentReference == model.PaymentRefernce).FirstOrDefaultAsync();
                 if (getAss != null)
                 {
                     // Payment getPaymentLog = await _context.Payment.Where(x => x.AssessmentId == assessmentId.ToString()).FirstOrDefaultAsync();
@@ -191,7 +232,7 @@ namespace NCSApi.Controllers
             }
         }
 
-        [HttpPut]
+        [HttpPost]
         [Route("decline")]
         public async Task<IActionResult> thisAsses([FromBody] DeclineRequest model)
         {
@@ -216,7 +257,6 @@ namespace NCSApi.Controllers
             {
                 return BadRequest(new { status = HttpStatusCode.InternalServerError, Message = "An error occured", data = ex });
             }
-
         }
 
         [HttpGet]
@@ -226,7 +266,10 @@ namespace NCSApi.Controllers
             try
             {
 
-                List<PaymentStatus> paymentStatuses = await _context.PaymentStatus.ToListAsync();
+                List<PaymentStatus> paymentStatuses = await _context.PaymentStatus
+                    .Include(x => x.PaymentLog).ToListAsync();
+
+                List<ReportResponse> report = _mapper.Map<List<ReportResponse>>(paymentStatuses);
                 if (paymentStatuses.Any())
                 {
                     paymentStatuses.ForEach(x => x.DateCreated.ToShortDateString());
@@ -235,7 +278,7 @@ namespace NCSApi.Controllers
                     //_context.Update(paymentStatuses);
                     //await _context.SaveChangesAsync();
 
-                    return Ok(new { status = HttpStatusCode.OK, Message = "Request Successful", Data = paymentStatuses });
+                    return Ok(new { status = HttpStatusCode.OK, Message = "Request Successful", Data = report });
                 }
                 return NotFound(new { status = HttpStatusCode.NotFound, Message = "No payment status found" });
             }
@@ -268,37 +311,11 @@ namespace NCSApi.Controllers
             }
         }
 
-        private async Task<bool> CreditSuspense(string Amount, string SourceAccount, string RequestId)
-        {
-            bool credited = false;
-
-            var account = new Accounts { CreditAccount = _dutyConfig.SuspenseAccount, DebitAccount = SourceAccount, Narration = "", TranAmount = Convert.ToDecimal(Amount) };
-            var body = new IntraTransferRequest { RequestID = RequestId, TranCurrency = "NGN", Accounts = account };
-
-
-            HttpRequestMessage request = new HttpRequestMessage
-            {
-                RequestUri = new Uri($"{_dutyConfig.BaseUrl}{_dutyConfig.IntraTransfer}"),
-                Method = HttpMethod.Post,
-                Content = new StringContent(JsonConvert.SerializeObject(body), Encoding.UTF8, "application/json")
-            };
-
-            var response = await _client.SendKaoshiRequest(request);
-            if (response.StatusCode == HttpStatusCode.OK)
-            {
-                credited = true;
-
-                return credited;
-            }
-
-            return credited;
-        }
-
         private async Task<bool> CreditTillAccount(string Amount, string SourceAccount, string RequestId)
         {
             bool credited = false;
 
-            var account = new Accounts { CreditAccount = _dutyConfig.TillAccount, DebitAccount = _dutyConfig.SuspenseAccount, Narration = $"Duty payment for {RequestId}", TranAmount = Convert.ToDecimal(Amount) };
+            var account = new Accounts { CreditAccount = _dutyConfig.TillAccount, DebitAccount = SourceAccount, Narration = "", TranAmount = Convert.ToDecimal(Amount) };
             var body = new IntraTransferRequest { RequestID = RequestId, TranCurrency = "NGN", Accounts = account };
 
 
@@ -316,8 +333,60 @@ namespace NCSApi.Controllers
 
                 return credited;
             }
+
             return credited;
         }
+
+        private void CreditPOCAccount(string Amount, string VATAmount, string RequestId, out string POCIsCredited, out string VATIsCredited)
+        {            
+            POCIsCredited = "POC not Credited";
+            VATIsCredited = "VAT not credited";
+
+            var account = new Accounts { CreditAccount = _dutyConfig.POCAccount, DebitAccount = _dutyConfig.TillAccount, Narration = $"Duty payment for {RequestId}", TranAmount = Convert.ToDecimal(Amount) };
+            var body = new IntraTransferRequest { RequestID = RequestId, TranCurrency = "NGN", Accounts = account };
+
+            HttpRequestMessage request = new HttpRequestMessage
+            {
+                RequestUri = new Uri($"{_dutyConfig.BaseUrl}{_dutyConfig.IntraTransfer}"),
+                Method = HttpMethod.Post,
+                Content = new StringContent(JsonConvert.SerializeObject(body), Encoding.UTF8, "application/json")
+            };
+
+            var response =  _client.SendKaoshiRequest(request).Result;
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                POCIsCredited = "POC was successfully credited";
+                CreditVATAccount(VATAmount, RequestId, out string VatCredited );
+                VATIsCredited = VatCredited;                
+            }
+            
+        }
+
+
+        private void CreditVATAccount(string Amount, string RequestId, out string VatCredited)
+        {          
+            VatCredited = "VAT not Credited";
+
+            var account = new Accounts { CreditAccount = _dutyConfig.VATAccount, DebitAccount = _dutyConfig.TillAccount, Narration = $"VAT payment for {RequestId}", TranAmount = Convert.ToDecimal(Amount) };
+            var body = new IntraTransferRequest { RequestID = RequestId, TranCurrency = "NGN", Accounts = account };
+
+
+            HttpRequestMessage request = new HttpRequestMessage
+            {
+                RequestUri = new Uri($"{_dutyConfig.BaseUrl}{_dutyConfig.IntraTransfer}"),
+                Method = HttpMethod.Post,
+                Content = new StringContent(JsonConvert.SerializeObject(body), Encoding.UTF8, "application/json")
+            };
+
+            var response = _client.SendKaoshiRequest(request).Result;
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                VatCredited = "VAT is credited";
+            }
+           
+        }
+
+
 
         string PaymentTypeFinder(string AssessmentType, PaymentLog paymentLog, Assessment Assessment)
         {
@@ -375,15 +444,18 @@ namespace NCSApi.Controllers
 
         }
 
-        void PaymentResponseFinder(PaymentLog PaymentLog, out bool ResponseReceived, out string Message, string assessmentType)
+        void PaymentResponseFinder(PaymentLog PaymentLog, out bool ResponseReceived, out string Message, string assessmentType, out string POCCredited, out string VATCredited)
         {
-            int retry = 50;
+            POCCredited = string.Empty;
+            VATCredited = string.Empty;
+            int retry = 100;
             PaymentStatus paymentStatus = null;
             ResponseReceived = false;
             Message = string.Empty;
-            int counter = -50;
+            int counter = -100;
             string responsePath = assessmentType == "Excise" ? _dutyConfig.ExciseResponsePath : @"C:\tosser\inout\eresponse";
 
+            Thread.Sleep(10000);
             do
             {
                 var all = Directory.GetFiles(responsePath);
@@ -438,7 +510,10 @@ namespace NCSApi.Controllers
 
                                 if (saveOne == 1)
                                 {
-                                    Task.Run(() => CreditTillAccount(PaymentLog.Amount, _dutyConfig.SuspenseAccount, PaymentLog.PaymentReference));
+                                    Tax vatOnAssessment = null;
+                                    vatOnAssessment =  _context.Tax.Where(x => x.AssessmentId.Equals(Guid.Parse(PaymentLog.AssessmentId)) && x.TaxCode.Equals("VAT")).FirstOrDefault();
+
+                                    CreditPOCAccount(PaymentLog.Amount, vatOnAssessment.TaxAmount, PaymentLog.PaymentReference, out POCCredited, out VATCredited);
                                     // retry = 0;
                                     counter = 0;
                                     ResponseReceived = (counter == 0);
@@ -455,9 +530,7 @@ namespace NCSApi.Controllers
                                 }
                             }
                         }
-                    }
-
-
+                    }                    
                 }
                 counter = (counter == 0 ? counter : counter += 1); retry = counter;
 
@@ -502,7 +575,6 @@ namespace NCSApi.Controllers
 
 
         #endregion
-
 
         private int RandomNumber(int min, int max)
         {
@@ -551,11 +623,13 @@ namespace NCSApi.Controllers
         {
             ErrorIsReceived = false;
             var getPaymentLog = _context.Payment.Find(paymentId);
-            int retry = 50;
-            int counter = -50;
+            int retry = 100;
+            int counter = -100;
             PaymentStatus paymentStatus = null;
             Message = string.Empty;
 
+
+            Thread.Sleep(10000);
             do
             {
                 //var all = Directory.GetFiles(@"C:\tosser\inout\in");
@@ -609,24 +683,47 @@ namespace NCSApi.Controllers
                                     };
                                 }
 
-                                cust.PaymentStatus.Add(paymentStatus);
-                                int saveOne = cust.SaveChanges();
+                                var getPaymentStatus = _context.PaymentStatus.Where(x => x.PaymentLogId.Equals(getPaymentLog.Id)).FirstOrDefault();
 
-                                if (saveOne == 1)
+                                if (getPaymentStatus != null)
                                 {
-                                    //  await CreditTillAccount(getPaymentLog.Amount, _dutyConfig.SuspenseAccount, getPaymentLog.PaymentReference);
+                                    getPaymentStatus.ErrorCode = paymentStatus.ErrorCode;
+                                    getPaymentStatus.Message = paymentStatus.Message;
+
                                     counter = 0;
                                     ErrorIsReceived = counter == 0;
 
-                                    cleaner.DeleteFile(@"C:\tosser\inout\err");
+                                    //cleaner.DeleteFile(@"C:\tosser\inout\err");
 
                                     Message = paymentStatus.Message;
                                     Log.Information("Error received");
                                     getPaymentLog.StatusId = (int)TransactionStatus.Completed;
                                     getPaymentLog.TransactionStatusId = (int)TransactionStatus.Pending;
-                                    _context.Update(getPaymentLog);
+                                    _context.Update(getPaymentStatus);
                                     _context.SaveChangesAsync();
                                     break;
+                                }
+                                else
+                                {
+                                    cust.PaymentStatus.Add(paymentStatus);
+                                    int saveOne = cust.SaveChanges();
+
+                                    if (saveOne == 1)
+                                    {
+                                        //  await CreditTillAccount(getPaymentLog.Amount, _dutyConfig.SuspenseAccount, getPaymentLog.PaymentReference);
+                                        counter = 0;
+                                        ErrorIsReceived = counter == 0;
+
+                                        // cleaner.DeleteFile(@"C:\tosser\inout\err");
+
+                                        Message = paymentStatus.Message;
+                                        Log.Information("Error received");
+                                        getPaymentLog.StatusId = (int)TransactionStatus.Completed;
+                                        getPaymentLog.TransactionStatusId = (int)TransactionStatus.Pending;
+                                        _context.Update(getPaymentLog);
+                                        _context.SaveChangesAsync();
+                                        break;
+                                    }
                                 }
                             }
                         }
@@ -660,33 +757,28 @@ namespace NCSApi.Controllers
             }
         }
 
-        //    void BalanceEquiry(string AccountNumber, string debitmount, out bool FundIsSufficient)
+        //void BalanceEquiry(string AccountNumber, string debitmount, out bool FundIsSufficient)
+        //{
+        //    FundIsSufficient = false;
+
+        //    var msg = new { Account = AccountNumber };
+
+        //    HttpRequestMessage request = new HttpRequestMessage
         //    {
-        //        FundIsSufficient = false;
+        //        RequestUri = new Uri($"{_dutyConfig.BaseUrl}{_dutyConfig.NameEnquiry}"),
+        //        Method = HttpMethod.Post,
+        //        Content = new StringContent(JsonConvert.SerializeObject(msg), Encoding.UTF8, "application/json")
+        //    };
 
-        //        var msg = new { Account = AccountNumber };
+        //    Log.Information($"Starting balance enquiry for the account: {AccountNumber}");
+        //    var response = Task.Run(() => _client.SendKaoshiRequest(request)).Result;
 
-        //        HttpRequestMessage request = new HttpRequestMessage
-        //        {
-        //            RequestUri = new Uri($"{_dutyConfig.BaseUrl}{_dutyConfig.NameEnquiry}"),
-        //            Method = HttpMethod.Post,
-        //            Content = new StringContent(JsonConvert.SerializeObject(msg), Encoding.UTF8, "application/json")
-        //        };
-
-        //        Log.Information($"Starting balance enquiry for the account: {AccountNumber}");
-        //        var response = Task.Run(() =>  _client.SendKaoshiRequest(request)).Result;
-
-        //         if (response.IsSuccessStatusCode)
-        //            {
-
-        //              string response = response.con
-
-
-
-        //            }
-
-
-
+        //    if (response.IsSuccessStatusCode)
+        //    {
+        //        string stringresponseContent = response.Content.ReadAsStringAsync().Result;
+        //        BalanceEnquiryResponse customerBalance = JsonConvert.DeserializeObject<BalanceEnquiryResponse>(stringresponseContent);
+        //    }
         //}
     }
+    
 }

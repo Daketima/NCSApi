@@ -44,10 +44,11 @@ namespace DataLayer.Data
 		//[XmlAttribute(AttributeName = "version")]
 		public string Version { get; set; }
 
+		public string AttachmentPath { get; set; }
+
 		public int  AssessmentTypeId {get; set;}
 
 		public virtual AssessmentType AssessmentType {get; set;}
-	}
-		
+	}	
 		   
 }

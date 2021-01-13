@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TransactionResponse>
+  <CustomsCode>str1234</CustomsCode>
+  <DeclarantCode>str1234</DeclarantCode>
+  <SadAsmt>
+    <SADAssessmentSerial>str1234</SADAssessmentSerial>
+    <SADAssessmentNumber>str1234</SADAssessmentNumber>
+    <SADYear>1234</SADYear>
+  </SadAsmt>
+  <TransactionStatus>Ok</TransactionStatus>
+  <Info>
+    <Message>str1234</Message>
+  </Info>
+</TransactionResponse>

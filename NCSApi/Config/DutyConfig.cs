@@ -7,7 +7,7 @@ namespace NCSApi.Config
 {
     public class DutyConfig
     {
-        public string SuspenseAccount { get; set; }
+        public string POCAccount { get; set; }
         
         public string ClientUsername { get; set; }
         
@@ -23,15 +23,21 @@ namespace NCSApi.Config
 
         public string TillAccount { get; set; }
 
-        //public string ExciseReadDirectory { get; set; }
+        public string VATAccount { get; set; }
 
-        //public string ExciseResponseDirectory { get; set; }
+        public string CustomDutyApiUrl { get; set; }
 
-        //public string ErrorResponseDirectory { get; set; }
+        public string EmailEndpoint { get; set; }
+
+        public string StaffDetailEndpoint { get; set; }
+
+        public string AccountDetail { get; set; }
 
         public string ExcisePaymentPath { get; set; }
 
         public string ExciseResponsePath { get; set; }
+
+        public string EmailWithAttachment { get; set; }
     }
 
     public enum TransactionStatus
