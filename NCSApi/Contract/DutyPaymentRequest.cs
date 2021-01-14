@@ -16,7 +16,10 @@ namespace NCSApi.Contract
         public string DutyTotalAmount { get; set; }
 
         [Required]
-        public string AssessmentId { get; set; }
+        public string AssessmentId { get; set; } 
+        
+       
+        public string LoggedInUser { get; set; }
 
        
     }

@@ -72,6 +72,8 @@ namespace NCSApi.Controllers
         {
             try
             {
+                //todo: implement check maker
+
                 Log.Information($"Attemting to get assessment with an id {assessmentId}");
                 Assessment getAss = await _context.Assessment
                                                      .Include(r => r.AssessmentType)

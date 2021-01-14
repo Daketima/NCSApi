@@ -21,10 +21,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using NCSApi.Config;
 using NCSApi.Contract;
 using NCSApi.Core;
+using NCSApi.Implementation;
 using NCSApi.Service;
 using Newtonsoft.Json;
 using Serilog;
@@ -44,8 +46,9 @@ namespace NCSApi.Controllers
         Random _random = new Random();
         readonly IMapper _mapper;
         readonly OpService _opService;
+        private readonly string appName;
 
-        public PaymentController(ICustomDutyClient client, DutyConfig dutyConfig, CustomContext context, IMapper mapper)
+        public PaymentController(ICustomDutyClient client, DutyConfig dutyConfig, CustomContext context, IMapper mapper,IConfiguration config)
         {
 
             _client = client;
@@ -53,6 +56,8 @@ namespace NCSApi.Controllers
             _context = context;
             _mapper = mapper;
             _opService = new OpService(_dutyConfig, _client);
+            appName = config.GetValue<string>("ApplicationName");
+
         }
 
         // GET: api/<PaymentController>
@@ -142,9 +147,23 @@ namespace NCSApi.Controllers
             try
             {
 
-               //PaymentLog existingPaymentLog = await _context.Payment.FirstOrDefaultAsync(x => x.AssessmentId.Equals(model.AssessmentId));               
-                
-                var newPaymentLog = new PaymentLog
+                //PaymentLog existingPaymentLog = await _context.Payment.FirstOrDefaultAsync(x => x.AssessmentId.Equals(model.AssessmentId));               
+
+                //todo: implement check for maker
+                var loggedinUser = await AuthService.GetLoggedinUserDetails(model.LoggedInUser);
+                var loggedInUsername = loggedinUser.Username;
+                var loggedInbranchCode = loggedinUser.BranchCode;
+
+                if (!string.IsNullOrEmpty(loggedInbranchCode) && !string.IsNullOrEmpty(loggedInUsername))
+                {
+                    if (loggedinUser.Applications.Any(a => a.application.name.ToLower() == appName.ToLower()))
+                    {
+                    
+                    }
+                }
+
+
+                        var newPaymentLog = new PaymentLog
                 {
                     CustomerAccount = model.CustomerAccount,
                     Amount = model.DutyTotalAmount,
@@ -189,8 +208,8 @@ namespace NCSApi.Controllers
                     Assessment assessmentToUpdate = await _context.Assessment.FindAsync(Guid.Parse(model.AssessmentId));
                     assessmentToUpdate.AttachmentPath = ImageFullPath;
 
-                    _opService.GetStaffDetail(assessmentToUpdate.BankBranchCode, "CARP", out string SupervisorMail, out string SupevisorName);
-                    _opService.SendMailToSupervisor(SupervisorMail, SupevisorName, assessmentToUpdate.Id.ToString(), out string Message);
+                    //_opService.GetStaffDetail(assessmentToUpdate.BankBranchCode, "customs", out string SupervisorMail, out string SupevisorName);
+                    //_opService.SendMailToSupervisor(SupervisorMail, SupevisorName, assessmentToUpdate.Id.ToString(), out string Message);
 
                     _context.Update(assessmentToUpdate);
                     await _context.SaveChangesAsync();

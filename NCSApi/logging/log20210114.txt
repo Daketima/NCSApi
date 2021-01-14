@@ -1,0 +1,8 @@
+2021-01-14 10:41:39.008 +01:00 [INF] Start processing HTTP request GET "http://172.16.200.172/TAJCentralAuth/api/account/getsupervisorsbybranchcode?branchCode=30201&appName=CARP"
+2021-01-14 10:41:39.323 +01:00 [INF] Sending HTTP request GET "http://172.16.200.172/TAJCentralAuth/api/account/getsupervisorsbybranchcode?branchCode=30201&appName=CARP"
+2021-01-14 10:41:39.696 +01:00 [INF] Received HTTP response after 364.9488ms - "OK"
+2021-01-14 10:41:39.699 +01:00 [INF] End processing HTTP request after 705.8477ms - "OK"
+2021-01-14 10:42:21.094 +01:00 [INF] Start processing HTTP request GET "http://172.16.200.172/TAJCentralAuth/api/account/getsupervisorsbybranchcode?branchCode=30201&appName=CARP"
+2021-01-14 10:42:21.098 +01:00 [INF] Sending HTTP request GET "http://172.16.200.172/TAJCentralAuth/api/account/getsupervisorsbybranchcode?branchCode=30201&appName=CARP"
+2021-01-14 10:42:21.164 +01:00 [INF] Received HTTP response after 66.1803ms - "OK"
+2021-01-14 10:42:21.165 +01:00 [INF] End processing HTTP request after 70.8428ms - "OK"
