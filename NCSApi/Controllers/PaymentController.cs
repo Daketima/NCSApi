@@ -67,7 +67,7 @@ namespace NCSApi.Controllers
 
         [HttpPost()]
         //[Produces("application/json")]
-        [Route("process/{PaymentReference}")]
+        [Route("process")]
         public async Task<IActionResult> Get(PaymentCheckDto model)
         {           
           
