@@ -92,7 +92,7 @@ namespace NCSApi.Controllers
                 var loggedInbranchCode = loggedinUser.BranchCode;
 
                 if (!string.IsNullOrEmpty(loggedInUsername)
-                    && loggedinUser.Applications.Any(a => a.application.name.ToLower() == appName.ToLower() && a.isSupervisor) && getAss.InitiatedByBranchCode == loggedInbranchCode)
+                    && loggedinUser.Applications.Any(a => a.application.name.ToLower() == appName.ToLower()) && getAss.InitiatedByBranchCode == loggedInbranchCode)
                 {
                     if (getAss != null)
                     {
