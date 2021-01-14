@@ -23,5 +23,7 @@ namespace NCSApi.Contract
         
         [Display(Name = "Area Command")]
         public string AreaCommand { get; set; }
+
+        public string LoggedInUser { get; set; }
     }
 }

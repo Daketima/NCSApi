@@ -10,5 +10,6 @@ namespace NCSApi.Contract
         public string PaymentRefernce { get; set; }
 
         public string Comment { get; set; }
+        public string LoggedInUser { get; set; }
     }
 }

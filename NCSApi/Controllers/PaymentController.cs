@@ -61,73 +61,95 @@ namespace NCSApi.Controllers
         }
 
         // GET: api/<PaymentController>
-        [HttpGet()]
+        //initiator leg
+        //[HttpGet()]
+        //public async Task<IActionResult> Get( string PaymentReference)
+
+        [HttpPost()]
         //[Produces("application/json")]
         [Route("process/{PaymentReference}")]
-        public async Task<IActionResult> Get(string PaymentReference)
+        public async Task<IActionResult> Get(PaymentCheckDto model)
         {           
           
             try
             {
-                var getPaymentLog = await _context.Payment.Where(x => x.PaymentReference.Equals(PaymentReference)).FirstOrDefaultAsync();
-                if (getPaymentLog == null) return BadRequest(new { status = HttpStatusCode.BadRequest, Message = "Wrong Payment Reference" });
+                var loggedinUser = await AuthService.GetLoggedinUserDetails(model.LoggedInUser);
+                var loggedInUsername = loggedinUser.Username;
+                var loggedInbranchCode = loggedinUser.BranchCode;
 
-                Assessment getNotificaton = await _context.Assessment.FindAsync(Guid.Parse(getPaymentLog.AssessmentId));
-                if (getNotificaton == null) return BadRequest(new { status = HttpStatusCode.BadRequest, Message = "Assessment Notification not found" });
-
-                var msg = new { Account = getPaymentLog.CustomerAccount };
-                string formatBaseUrl = _dutyConfig.BaseUrl;
-
-                HttpRequestMessage request = new HttpRequestMessage
+                if (!string.IsNullOrEmpty(loggedInUsername)
+                    && loggedinUser.Applications.Any(a => a.application.name.ToLower() == appName.ToLower() && !a.isSupervisor))
                 {
-                    RequestUri = new Uri($"{_dutyConfig.BaseUrl}{_dutyConfig.NameEnquiry}"),
-                    Method = HttpMethod.Post,
-                    Content = new StringContent(JsonConvert.SerializeObject(msg), Encoding.UTF8, "application/json")
-                };
-                Log.Information($"Attempting Customer Name Enquiry for the account: {getPaymentLog.CustomerAccount}");
-                var response = await _client.SendKaoshiRequest(request);
+                    var getPaymentLog = await _context.Payment.Where(x => x.PaymentReference.Equals(model.PaymentReference) && x.InitiatedByBranchCode == loggedInbranchCode).FirstOrDefaultAsync();
 
-                if (response.IsSuccessStatusCode)
-                {
-                    string assessmentType = Enum.GetName(typeof(AssessmentTypes), getNotificaton.AssessmentTypeId);
-                 
-                    string content = await response.Content.ReadAsStringAsync();
-                    bool tillIsCredited = await CreditTillAccount(getPaymentLog.Amount, getPaymentLog.CustomerAccount, PaymentReference);
+                    if (getPaymentLog == null) return BadRequest(new { status = HttpStatusCode.BadRequest, Message = "Wrong Payment Reference | payment was not initiated in your branch" });
 
-                    if (tillIsCredited)
+                    Assessment getNotificaton = await _context.Assessment.FindAsync(Guid.Parse(getPaymentLog.AssessmentId));
+                    if (getNotificaton == null) return BadRequest(new { status = HttpStatusCode.BadRequest, Message = "Assessment Notification not found" });
+
+                    var msg = new { Account = getPaymentLog.CustomerAccount };
+                    string formatBaseUrl = _dutyConfig.BaseUrl;
+
+                    HttpRequestMessage request = new HttpRequestMessage
                     {
-                        string xmlBuilder = PaymentTypeFinder(assessmentType, getPaymentLog, getNotificaton);
-                        string xmlSavePath = assessmentType == "Excise" ? _dutyConfig.ExcisePaymentPath : @"C:\tosser\inout\in\";
-                        XmlDocument xDoc = new XmlDocument();
-                        xDoc.LoadXml(xmlBuilder);                 
-                        xDoc.Save(Path.Combine(xmlSavePath, $"{assessmentType}_{DateTime.Now.Ticks}.xml"));
+                        RequestUri = new Uri($"{_dutyConfig.BaseUrl}{_dutyConfig.NameEnquiry}"),
+                        Method = HttpMethod.Post,
+                        Content = new StringContent(JsonConvert.SerializeObject(msg), Encoding.UTF8, "application/json")
+                    };
+                    Log.Information($"Attempting Customer Name Enquiry for the account: {getPaymentLog.CustomerAccount}");
+                    var response = await _client.SendKaoshiRequest(request);
 
-                        PaymentResponseFinder(getPaymentLog, out bool _responseReceived, out string Message, assessmentType, out string POCIsCredit, out string VATIsCredit);
-                        if (_responseReceived)
-                        {                            
-                            return Ok(new { Status = HttpStatusCode.OK, Message = "Request Successful",
-                            data = new { NCSResponse =  Message, POSAccountStatus = POCIsCredit, VATAccountStatus = VATIsCredit} });
-                        }
-                        else
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string assessmentType = Enum.GetName(typeof(AssessmentTypes), getNotificaton.AssessmentTypeId);
+
+                        string content = await response.Content.ReadAsStringAsync();
+                        bool tillIsCredited = await CreditTillAccount(getPaymentLog.Amount, getPaymentLog.CustomerAccount, model.PaymentReference);
+
+                        if (tillIsCredited)
                         {
-                            ProcessNCSError(getPaymentLog.Id, out bool errConfirm, out string ErrorMessage);
-                            if (errConfirm)
+                            string xmlBuilder = PaymentTypeFinder(assessmentType, getPaymentLog, getNotificaton);
+                            string xmlSavePath = assessmentType == "Excise" ? _dutyConfig.ExcisePaymentPath : @"C:\tosser\inout\in\";
+                            XmlDocument xDoc = new XmlDocument();
+                            xDoc.LoadXml(xmlBuilder);
+                            xDoc.Save(Path.Combine(xmlSavePath, $"{assessmentType}_{DateTime.Now.Ticks}.xml"));
+
+                            PaymentResponseFinder(getPaymentLog, out bool _responseReceived, out string Message, assessmentType, out string POCIsCredit, out string VATIsCredit);
+                            if (_responseReceived)
                             {
-                                cleaner.DeleteFile(@"C:\tosser\inout\err");
-                                return Ok(new { Status = HttpStatusCode.OK, Message = ErrorMessage });
+                                return Ok(new
+                                {
+                                    Status = HttpStatusCode.OK,
+                                    Message = "Request Successful",
+                                    data = new { NCSResponse = Message, POSAccountStatus = POCIsCredit, VATAccountStatus = VATIsCredit }
+                                });
                             }
+                            else
+                            {
+                                ProcessNCSError(getPaymentLog.Id, out bool errConfirm, out string ErrorMessage);
+                                if (errConfirm)
+                                {
+                                    cleaner.DeleteFile(@"C:\tosser\inout\err");
+                                    return Ok(new { Status = HttpStatusCode.OK, Message = ErrorMessage });
+                                }
+                            }
+
+                            getPaymentLog.StatusId = (int)TransactionStatus.Completed;
+                            getPaymentLog.TransactionStatusId = (int)TransactionStatus.Pending;
+                            _context.Update(getPaymentLog);
+                            await _context.SaveChangesAsync();
+
+                            return Ok(new { Status = HttpStatusCode.OK, Message = "Response yet to come from NCS" });
                         }
-
-                        getPaymentLog.StatusId = (int)TransactionStatus.Completed;
-                        getPaymentLog.TransactionStatusId = (int)TransactionStatus.Pending;
-                        _context.Update(getPaymentLog);
-                        await _context.SaveChangesAsync();
-
-                        return Ok(new { Status = HttpStatusCode.OK, Message = "Response yet to come from NCS" });
                     }
+                    Log.Information($"Name enquiry response: {response.StatusCode}. client user name: {_dutyConfig.ClientUsername}, client password: {_dutyConfig.ClientPassword}");
+                    return BadRequest(new { Status = HttpStatusCode.OK, Message = "Name enquired failed. No response from server" });
                 }
-                Log.Information($"Name enquiry response: {response.StatusCode}. client user name: {_dutyConfig.ClientUsername}, client password: {_dutyConfig.ClientPassword}");
-                return BadRequest(new { Status = HttpStatusCode.OK, Message = "Name enquired failed. No response from server" });
+                else
+                {
+                    return BadRequest("staff with supervisor role on this application, are not allowed to access this action");
+                }
+              
             }
             catch (Exception ex)
             {
@@ -136,6 +158,7 @@ namespace NCSApi.Controllers
             }
         }
 
+        // initiator leg
         [HttpPost()]
         //[Produces("application/json")]
         [Route("initiate")]
@@ -154,69 +177,71 @@ namespace NCSApi.Controllers
                 var loggedInUsername = loggedinUser.Username;
                 var loggedInbranchCode = loggedinUser.BranchCode;
 
-                if (!string.IsNullOrEmpty(loggedInbranchCode) && !string.IsNullOrEmpty(loggedInUsername))
+                if (!string.IsNullOrEmpty(loggedInUsername)
+                    && loggedinUser.Applications.Any(a => a.application.name.ToLower() == appName.ToLower() && !a.isSupervisor))
                 {
-                    if (loggedinUser.Applications.Any(a => a.application.name.ToLower() == appName.ToLower()))
+                    var newPaymentLog = new PaymentLog
                     {
-                    
-                    }
-                }
+                        CustomerAccount = model.CustomerAccount,
+                        Amount = model.DutyTotalAmount,
+                        StatusId = (int)TransactionStatus.Initiated,
+                        PaymentReference = RandomPassword(),
+                        AssessmentId = model.AssessmentId,
+                        DateCreated = DateTime.Now,
+                        TransactionStatusId = (int)TransactionStatus.Pending,
+                        InitiatedByBranchCode = loggedInbranchCode
 
+                    };
 
-                        var newPaymentLog = new PaymentLog
-                {
-                    CustomerAccount = model.CustomerAccount,
-                    Amount = model.DutyTotalAmount,
-                    StatusId = (int)TransactionStatus.Initiated,
-                    PaymentReference = RandomPassword(),
-                    AssessmentId = model.AssessmentId,
-                    DateCreated = DateTime.Now,
-                    TransactionStatusId = (int)TransactionStatus.Pending
+                    string ImageFullPath = string.Empty;
 
-                };
-
-                string ImageFullPath = string.Empty;
-
-                if (Request.Form.Files.Any())
-                {
-                    var file = Request.Form.Files[0];
-                    var folderName = Path.Combine("Assessment_Attachment");
-                    var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-
-                    if (file.Length > 0)
+                    if (Request.Form.Files.Any())
                     {
-                        var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
-                        fileName = $"{DateTime.Now.Ticks}{fileName}";
-                        var fullPath = Path.Combine(pathToSave, fileName);
-                        var dbPath = Path.Combine(folderName, fileName);
+                        var file = Request.Form.Files[0];
+                        var folderName = Path.Combine("Assessment_Attachment");
+                        var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
 
-                        ImageFullPath = $"{_dutyConfig.CustomDutyApiUrl}{fileName}";
-
-                        using (var stream = new FileStream(fullPath, FileMode.Create))
+                        if (file.Length > 0)
                         {
-                            file.CopyTo(stream);
-                        }                        
+                            var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                            fileName = $"{DateTime.Now.Ticks}{fileName}";
+                            var fullPath = Path.Combine(pathToSave, fileName);
+                            var dbPath = Path.Combine(folderName, fileName);
+
+                            ImageFullPath = $"{_dutyConfig.CustomDutyApiUrl}{fileName}";
+
+                            using (var stream = new FileStream(fullPath, FileMode.Create))
+                            {
+                                file.CopyTo(stream);
+                            }
+                        }
                     }
+
+                    _context.Payment.Add(newPaymentLog);
+                    int added = await _context.SaveChangesAsync();
+
+                    if (added == 1)
+                    {
+
+                        Assessment assessmentToUpdate = await _context.Assessment.FindAsync(Guid.Parse(model.AssessmentId));
+                        assessmentToUpdate.AttachmentPath = ImageFullPath;
+                        assessmentToUpdate.InitiatedBy = loggedInUsername;
+                        assessmentToUpdate.InitiatedByBranchCode = loggedInbranchCode;
+
+                        _opService.GetStaffDetail(loggedInbranchCode, "customs", out string SupervisorMail, out string SupevisorName);
+                        _opService.SendMailToSupervisor(SupervisorMail, SupevisorName, assessmentToUpdate.Id.ToString(), out string Message);
+
+                        _context.Update(assessmentToUpdate);
+                        await _context.SaveChangesAsync();
+
+                        return Ok(new { HttpStatusCode.OK, Message = "Request completed", Data = new { PaymentReference = newPaymentLog.PaymentReference, PaymentId = newPaymentLog.Id } });
+                    }
+                    return BadRequest(new { HttpStatusCode.BadRequest, Message = "Request Unsuccessful" });
                 }
-             
-                _context.Payment.Add(newPaymentLog);
-                int added = await _context.SaveChangesAsync();
-
-                if (added == 1)
-                { 
-                   
-                    Assessment assessmentToUpdate = await _context.Assessment.FindAsync(Guid.Parse(model.AssessmentId));
-                    assessmentToUpdate.AttachmentPath = ImageFullPath;
-
-                    //_opService.GetStaffDetail(assessmentToUpdate.BankBranchCode, "customs", out string SupervisorMail, out string SupevisorName);
-                    //_opService.SendMailToSupervisor(SupervisorMail, SupevisorName, assessmentToUpdate.Id.ToString(), out string Message);
-
-                    _context.Update(assessmentToUpdate);
-                    await _context.SaveChangesAsync();
-
-                    return Ok(new { HttpStatusCode.OK, Message = "Request completed", Data = new { PaymentReference = newPaymentLog.PaymentReference, PaymentId = newPaymentLog.Id } });
+                else
+                {
+                    return BadRequest("users with supervisor role are not allowed to perform this operation. ");
                 }
-                return BadRequest(new { HttpStatusCode.BadRequest, Message = "Request Unsuccessful" });
             }
 
             catch (Exception ex)
@@ -226,24 +251,40 @@ namespace NCSApi.Controllers
         }
 
 
-
+        //approval leg
         [HttpPost]        
         [Route("accept")]
-        public async Task<IActionResult> thisAss([FromBody]DeclineRequest model)
+        public async Task<IActionResult> thisAss([FromBody] DeclineRequest model)
         {
             try
             {
                 PaymentLog getAss = await _context.Payment.Where(x => x.PaymentReference == model.PaymentRefernce).FirstOrDefaultAsync();
-                if (getAss != null)
-                {
-                    // Payment getPaymentLog = await _context.Payment.Where(x => x.AssessmentId == assessmentId.ToString()).FirstOrDefaultAsync();
-                    getAss.StatusId = (int)TransactionStatus.Accepted;
-                    _context.Update(getAss);
-                    await _context.SaveChangesAsync();
+              
+                var loggedinUser = await AuthService.GetLoggedinUserDetails(model.LoggedInUser);
+                var loggedInUsername = loggedinUser.Username;
+                var loggedInbranchCode = loggedinUser.BranchCode;
 
-                    return Ok(new { status = HttpStatusCode.OK, Message = "Payment accepted", });
+                if (!string.IsNullOrEmpty(loggedInUsername)
+                   && loggedinUser.Applications.Any(a => a.application.name.ToLower() == appName.ToLower() && a.isSupervisor) && getAss.InitiatedByBranchCode == loggedInbranchCode)
+                { 
+                    if (getAss != null)
+                    {
+                        // Payment getPaymentLog = await _context.Payment.Where(x => x.AssessmentId == assessmentId.ToString()).FirstOrDefaultAsync();
+                        getAss.StatusId = (int)TransactionStatus.Accepted;
+                        _context.Update(getAss);
+                        await _context.SaveChangesAsync();
+
+                        return Ok(new { status = HttpStatusCode.OK, Message = "Payment accepted", });
+                    }
+                    return NotFound(new { status = HttpStatusCode.NotFound, Message = "Payment not found", data = "Resource not found" });
+
                 }
-                return NotFound(new { status = HttpStatusCode.NotFound, Message = "Payment not found", data = "Resource not found" });
+                else
+                {
+                    return BadRequest("only staff with supervisor role can perform this action | this transaction was not initiated in your branch");
+                }
+
+
             }
             catch (Exception ex)
             {
@@ -251,6 +292,7 @@ namespace NCSApi.Controllers
             }
         }
 
+        //approval leg
         [HttpPost]
         [Route("decline")]
         public async Task<IActionResult> thisAsses([FromBody] DeclineRequest model)
@@ -259,18 +301,32 @@ namespace NCSApi.Controllers
             {
 
                 PaymentLog getAss = await _context.Payment.Where(x => x.PaymentReference == model.PaymentRefernce).FirstOrDefaultAsync();
-                if (getAss != null)
+
+                var loggedinUser = await AuthService.GetLoggedinUserDetails(model.LoggedInUser);
+                var loggedInUsername = loggedinUser.Username;
+                var loggedInbranchCode = loggedinUser.BranchCode;
+
+                if (!string.IsNullOrEmpty(loggedInUsername)
+                   && loggedinUser.Applications.Any(a => a.application.name.ToLower() == appName.ToLower() && a.isSupervisor) && getAss.InitiatedByBranchCode == loggedInbranchCode)
                 {
-                    // Payment getPaymentLog = await _context.Payment.Where(x => x.AssessmentId == assessmentId.ToString()).FirstOrDefaultAsync();
-                    getAss.StatusId = (int)TransactionStatus.Declined;
-                    getAss.Comment = model.Comment;
+                    if (getAss != null)
+                    {
+                        // Payment getPaymentLog = await _context.Payment.Where(x => x.AssessmentId == assessmentId.ToString()).FirstOrDefaultAsync();
+                        getAss.StatusId = (int)TransactionStatus.Declined;
+                        getAss.Comment = model.Comment;
 
-                    _context.Update(getAss);
-                    await _context.SaveChangesAsync();
+                        _context.Update(getAss);
+                        await _context.SaveChangesAsync();
 
-                    return Ok(new { status = HttpStatusCode.OK, Message = "Payment declined", });
+                        return Ok(new { status = HttpStatusCode.OK, Message = "Payment declined", });
+                    }
+                    return NotFound(new { status = HttpStatusCode.NotFound, Message = "Payment not found", data = "Resource not found" });
                 }
-                return NotFound(new { status = HttpStatusCode.NotFound, Message = "Payment not found", data = "Resource not found" });
+                else
+                {
+                    return BadRequest("only supervisor role can perform this action | this transaction was not initiated in your branch");
+                }
+               
             }
             catch (Exception ex)
             {
@@ -278,28 +334,45 @@ namespace NCSApi.Controllers
             }
         }
 
-        [HttpGet]
+        //[HttpGet]
+        //[Route("Reports")]
+        
+        [HttpPost]
         [Route("Reports")]
-        public async Task<IActionResult> GetPayment()
+        public async Task<IActionResult> GetPayment(ReportDto model )
         {
             try
             {
+                var loggedinUser = await AuthService.GetLoggedinUserDetails(model.LoggedInUser);
+                var loggedInUsername = loggedinUser.Username;
+                var loggedInbranchCode = loggedinUser.BranchCode;
 
-                List<PaymentStatus> paymentStatuses = await _context.PaymentStatus
+                if (!string.IsNullOrEmpty(loggedInUsername)
+                   && loggedinUser.Applications.Any(a => a.application.name.ToLower() == appName.ToLower() && a.isSupervisor))
+                {
+                    List<PaymentStatus> paymentStatuses = await _context.PaymentStatus
                     .Include(x => x.PaymentLog).ToListAsync();
 
-                List<ReportResponse> report = _mapper.Map<List<ReportResponse>>(paymentStatuses);
-                if (paymentStatuses.Any())
-                {
-                    paymentStatuses.ForEach(x => x.DateCreated.ToShortDateString());
-                    //// Payment getPaymentLog = await _context.Payment.Where(x => x.AssessmentId == assessmentId.ToString()).FirstOrDefaultAsync();
-                    //paymentStatuses.StatusId = (int)TransactionStatus.Accepted;
-                    //_context.Update(paymentStatuses);
-                    //await _context.SaveChangesAsync();
+                    List<ReportResponse> report = _mapper.Map<List<ReportResponse>>(paymentStatuses);
+                    if (paymentStatuses.Any())
+                    {
+                        paymentStatuses.ForEach(x => x.DateCreated.ToShortDateString());
+                        //// Payment getPaymentLog = await _context.Payment.Where(x => x.AssessmentId == assessmentId.ToString()).FirstOrDefaultAsync();
+                        //paymentStatuses.StatusId = (int)TransactionStatus.Accepted;
+                        //_context.Update(paymentStatuses);
+                        //await _context.SaveChangesAsync();
 
-                    return Ok(new { status = HttpStatusCode.OK, Message = "Request Successful", Data = report });
+                        return Ok(new { status = HttpStatusCode.OK, Message = "Request Successful", Data = report });
+                    }
+                    return NotFound(new { status = HttpStatusCode.NotFound, Message = "No payment status found" });
                 }
-                return NotFound(new { status = HttpStatusCode.NotFound, Message = "No payment status found" });
+                else
+                {
+                    return BadRequest("report can only be accessed by supervisor");
+                }
+
+
+                
             }
             catch (Exception ex)
             {
@@ -404,8 +477,6 @@ namespace NCSApi.Controllers
             }
            
         }
-
-
 
         string PaymentTypeFinder(string AssessmentType, PaymentLog paymentLog, Assessment Assessment)
         {

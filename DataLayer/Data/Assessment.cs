@@ -47,6 +47,8 @@ namespace DataLayer.Data
 		public string AttachmentPath { get; set; }
 
 		public int  AssessmentTypeId {get; set;}
+		public string  InitiatedBy {get; set;}
+		public string  InitiatedByBranchCode {get; set;}
 
 		public virtual AssessmentType AssessmentType {get; set;}
 	}	

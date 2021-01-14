@@ -23,6 +23,7 @@ namespace DataLayer.Data
         public int TransactionStatusId { get; set; }
 
         public string Comment { get; set; }
+        public string InitiatedByBranchCode { get; set; }
 
         public virtual LOV Status { get; set; }
         
