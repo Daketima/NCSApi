@@ -50,7 +50,7 @@ namespace NCSApi.Controllers
            // string BranchCode = Request?.Headers["BranchCode"];
             try
             {
-                List<Assessment> getAsses = await _context.Assessment.Where(x => x.BankBranchCode == BranchCode).ToListAsync();
+                List<Assessment> getAsses = await _context.Assessment.Where(x => x.BankBranchCode == BranchCode || x.InitiatedByBranchCode  == BranchCode).ToListAsync();
 
                 if (getAsses != null)
                 {
