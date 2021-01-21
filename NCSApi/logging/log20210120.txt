@@ -1,0 +1,5 @@
+2021-01-20 11:07:33.681 +01:00 [INF] Attempting Customer Name Enquiry for the account: 0000144798
+2021-01-20 11:07:35.340 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2021-01-20 11:07:35.348 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2021-01-20 11:07:39.726 +01:00 [INF] Received HTTP response after 4372.365ms - "OK"
+2021-01-20 11:07:39.733 +01:00 [INF] End processing HTTP request after 4408.5324ms - "OK"
