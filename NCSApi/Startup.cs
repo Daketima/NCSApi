@@ -21,6 +21,7 @@ using DataLayer;
 using System.IO;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.Http;
+using NCSApi.Implementation;
 
 namespace NCSApi
 {
@@ -49,6 +50,7 @@ namespace NCSApi
             services.AddSingleton(new CustomContext());           
             services.AddAutoMapper(typeof(Startup));
             services.AddHttpClient<ICustomDutyClient, CustomDutyClientService>();
+            services.AddScoped<ITransferService, TransferService>();
             // services.AddSingleton(_settings);
             //services.AddSingleton(new CustomContext());
 

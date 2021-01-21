@@ -45,16 +45,18 @@ namespace NCSApi.Controllers
         readonly CustomContext _context;
         Random _random = new Random();
         readonly IMapper _mapper;
+        private readonly ITransferService transferService;
         readonly OpService _opService;
         private readonly string appName;
 
-        public PaymentController(ICustomDutyClient client, DutyConfig dutyConfig, CustomContext context, IMapper mapper,IConfiguration config)
+        public PaymentController(ICustomDutyClient client, DutyConfig dutyConfig, CustomContext context, IMapper mapper,IConfiguration config,ITransferService transferService)
         {
 
             _client = client;
             _dutyConfig = dutyConfig;
             _context = context;
             _mapper = mapper;
+            this.transferService = transferService;
             _opService = new OpService(_dutyConfig, _client);
             appName = config.GetValue<string>("ApplicationName");
 
@@ -103,10 +105,42 @@ namespace NCSApi.Controllers
                     {
                         string assessmentType = Enum.GetName(typeof(AssessmentTypes), getNotificaton.AssessmentTypeId);
 
-                        string content = await response.Content.ReadAsStringAsync();
-                        bool tillIsCredited = await CreditTillAccount(getPaymentLog.Amount, getPaymentLog.CustomerAccount, model.PaymentReference);
+                        //string content = await response.Content.ReadAsStringAsync();
+                        //bool tillIsCredited = await CreditTillAccount(getPaymentLog.Amount, getPaymentLog.CustomerAccount, model.PaymentReference);
 
-                        if (tillIsCredited)
+                        //var postRequestBody = new PostingDetailObj
+                        //{
+                        //    RequestID = model.PaymentReference,
+                        //    TranCurrency = "NGN",
+                        //    Accounts = new Implementation.Accounts
+                        //    {
+                        //        CreditAccount = _dutyConfig.TillAccount, 
+                        //        DebitAccount = getPaymentLog.CustomerAccount,
+                        //        Narration = "", 
+                        //        TranAmount = Convert.ToDouble(getPaymentLog.Amount) 
+                        //    }
+                        //};
+                        var postRequestBody = new PostingDetailObj
+                        {
+                            RequestID = model.PaymentReference,
+                            TranCurrency = "NGN",
+                            SplitFee = "N",
+                            TranRemarks = model.PaymentReference,
+                            TranType = "CustomDutyPayment",
+                            Accounts = new Implementation.Accounts
+                            {
+                                CreditAccount = _dutyConfig.TillAccount,
+                                DebitAccount = getPaymentLog.CustomerAccount,
+                                Narration = $"custom duty payment for {model.PaymentReference}",
+                                TranAmount = Convert.ToDouble(getPaymentLog.Amount),
+                                CreditBranch = loggedInbranchCode
+                                //DebitBranch = record.DebitBranch
+                            }
+                        };
+                        var transferResult = await transferService.PostTransferAsnyc(postRequestBody);
+
+                        //if (tillIsCredited)
+                        if (transferResult.ResponseMessage.ToLower() == "successful")
                         {
                             string xmlBuilder = PaymentTypeFinder(assessmentType, getPaymentLog, getNotificaton);
                             string xmlSavePath = assessmentType == "Excise" ? _dutyConfig.ExcisePaymentPath : @"C:\tosser\inout\in\";
@@ -114,14 +148,17 @@ namespace NCSApi.Controllers
                             xDoc.LoadXml(xmlBuilder);
                             xDoc.Save(Path.Combine(xmlSavePath, $"{assessmentType}_{DateTime.Now.Ticks}.xml"));
 
-                            PaymentResponseFinder(getPaymentLog, out bool _responseReceived, out string Message, assessmentType, out string POCIsCredit, out string VATIsCredit);
-                            if (_responseReceived)
+                            //PaymentResponseFinder(getPaymentLog, out bool _responseReceived, out string Message, assessmentType, out string POCIsCredit, out string VATIsCredit);
+                            var paymentResponseCount = await PaymentResponseFinder_(getPaymentLog, assessmentType,loggedInbranchCode);
+                            //if (_responseReceived)
+                            if (paymentResponseCount > 0)
                             {
                                 return Ok(new
                                 {
                                     Status = HttpStatusCode.OK,
                                     Message = "Request Successful",
-                                    data = new { NCSResponse = Message, POSAccountStatus = POCIsCredit, VATAccountStatus = VATIsCredit }
+                                    data = new { NCSResponse = "Successful", POSAccountStatus = "POC was credited Successfully", VATAccountStatus = paymentResponseCount == 2 ? "Vat was credited successfully" : "Vat not credited" }
+                                    //data = new { NCSResponse = Message, POSAccountStatus = POCIsCredit, VATAccountStatus = VATIsCredit }
                                 });
                             }
                             else
@@ -228,8 +265,11 @@ namespace NCSApi.Controllers
                         assessmentToUpdate.InitiatedBy = loggedInUsername;
                         assessmentToUpdate.InitiatedByBranchCode = loggedInbranchCode;
 
-                        _opService.GetStaffDetail(loggedInbranchCode, "customs", out string SupervisorMail, out string SupevisorName);
-                        _opService.SendMailToSupervisor(SupervisorMail, SupevisorName, assessmentToUpdate.Id.ToString(), out string Message);
+                        //_opService.GetStaffDetail(loggedInbranchCode, "customs", out string SupervisorMail, out string SupevisorName);
+                        _opService.GetStaffDetail_(loggedInbranchCode, "customs", out List<NameMailPair> NameMailPairs);
+
+                        //_opService.SendMailToSupervisor(SupervisorMail, SupevisorName, assessmentToUpdate.Id.ToString(), out string Message);
+                        _opService.SendMailToSupervisor_(NameMailPairs, assessmentToUpdate.Id.ToString());
 
                         _context.Update(assessmentToUpdate);
                         await _context.SaveChangesAsync();
@@ -604,6 +644,7 @@ namespace NCSApi.Controllers
                                     vatOnAssessment =  _context.Tax.Where(x => x.AssessmentId.Equals(Guid.Parse(PaymentLog.AssessmentId)) && x.TaxCode.Equals("VAT")).FirstOrDefault();
 
                                     CreditPOCAccount(PaymentLog.Amount, vatOnAssessment.TaxAmount, PaymentLog.PaymentReference, out POCCredited, out VATCredited);
+                                    
                                     // retry = 0;
                                     counter = 0;
                                     ResponseReceived = (counter == 0);
@@ -627,6 +668,176 @@ namespace NCSApi.Controllers
             }
             while (retry != 0);
 
+        }
+        
+        async Task<int> PaymentResponseFinder_(PaymentLog PaymentLog, string assessmentType,string loggedinBranchCode)
+        {
+            
+            int retry = 100;
+            PaymentStatus paymentStatus = null;
+           
+            int counter = -100;
+            string responsePath = assessmentType == "Excise" ? _dutyConfig.ExciseResponsePath : @"C:\tosser\inout\eresponse";
+            var value = new PostingRootObject();
+            var successCount = 0;
+            Thread.Sleep(10000);
+            do
+            {
+                var all = Directory.GetFiles(responsePath);
+                if (all.Any())
+                {
+                    foreach (string filename in all)
+                    {
+                        string readFile = System.IO.File.ReadAllText(filename);
+                        XmlDocument xmlDoc = new XmlDocument();
+                        xmlDoc.LoadXml(readFile);
+
+                        var transactionStatusDetails = xmlDoc.SelectNodes("TransactionResponse");
+
+                        using (CustomContext cust = new CustomContext())
+                        {
+                            foreach (XmlNode node in transactionStatusDetails)
+                            {
+                                if (readFile.Contains("PayExcise"))
+                                {
+                                    paymentStatus = new PaymentStatus
+                                    {
+                                        CustomsCode = node["CustomsCode"].InnerText,
+                                        CompanyCode = node["CompanyCode"].InnerText,
+                                        AssessmentSerial = node["Asmt"]["AssessmentSerial"].InnerText,
+                                        AssessmentNumber = node["Asmt"]["AssessmentNumber"].InnerText,
+                                        Year = node["Asmt"]["SADYear"].InnerText,
+                                        Status = node["TransactionStatus"].InnerText,
+                                        Message = node["Info"]["Message"].InnerText,
+                                        DateCreated = DateTime.Now,
+                                        PaymentLogId = PaymentLog.Id
+                                    };
+                                }
+                                else
+                                {
+                                    paymentStatus = new PaymentStatus
+                                    {
+                                        CustomsCode = node["CustomsCode"].InnerText,
+                                        DeclarantCode = node["DeclarantCode"].InnerText,
+                                        AssessmentSerial = node["SadAsmt"]["SADAssessmentSerial"].InnerText,
+                                        AssessmentNumber = node["SadAsmt"]["SADAssessmentNumber"].InnerText,
+                                        Year = node["SadAsmt"]["SADYear"].InnerText,
+                                        Status = node["TransactionStatus"].InnerText,
+                                        Message = node["Info"]["Message"].InnerText,
+                                        DateCreated = DateTime.Now,
+                                        PaymentLogId = PaymentLog.Id
+                                    };
+                                }
+
+
+                                cust.PaymentStatus.Add(paymentStatus);
+                                int saveOne = cust.SaveChanges();
+
+                                if (saveOne == 1)
+                                {
+                                    Tax vatOnAssessment = null;
+                                    vatOnAssessment =  _context.Tax.Where(x => x.AssessmentId.Equals(Guid.Parse(PaymentLog.AssessmentId)) && x.TaxCode.Equals("VAT")).FirstOrDefault();
+
+                                    //CreditPOCAccount(PaymentLog.Amount, vatOnAssessment.TaxAmount, PaymentLog.PaymentReference, out POCCredited, out VATCredited);
+                                    
+                                    //var postRequestBody = new PostingDetailObj
+                                    //{
+                                    //    RequestID = PaymentLog.PaymentReference,
+                                    //    TranCurrency = "NGN",
+                                    //    Accounts = new Implementation.Accounts
+                                    //    {
+                                    //        CreditAccount = _dutyConfig.POCAccount,
+                                    //        DebitAccount = _dutyConfig.TillAccount,// getPaymentLog.CustomerAccount,
+                                    //        Narration = "",
+                                    //        TranAmount = Convert.ToDouble(PaymentLog.Amount)
+                                    //    }
+                                    //};
+
+                                    var postRequestBody = new PostingDetailObj
+                                    {
+                                        RequestID = PaymentLog.PaymentReference,
+                                        TranCurrency = "NGN",
+                                        SplitFee = "N",
+                                        TranRemarks = PaymentLog.PaymentReference,
+                                        TranType = "CustomDutyPayment",
+                                        Accounts = new Implementation.Accounts
+                                        {
+                                            CreditAccount = _dutyConfig.POCAccount,
+                                            DebitAccount = _dutyConfig.TillAccount,// getPaymentLog.CustomerAccount,
+                                            Narration = $"custom_duty {PaymentLog.PaymentReference} from {loggedinBranchCode}",
+                                            TranAmount = Convert.ToDouble(PaymentLog.Amount),
+                                            CreditBranch = "",
+                                            DebitBranch = loggedinBranchCode
+                                        }
+                                    };
+
+                                    var transferResult = await transferService.PostTransferAsnyc(postRequestBody);
+                                    if (transferResult.ResponseMessage.ToLower() == "successful")
+                                    {
+                                        successCount = 1;
+                                        //var account = new Accounts { CreditAccount = _dutyConfig.VATAccount, DebitAccount = _dutyConfig.TillAccount, Narration = $"VAT payment for {RequestId}", TranAmount = Convert.ToDecimal(Amount) };
+                                        //var vatRequestBody = new PostingDetailObj
+                                        //{
+                                        //    RequestID = PaymentLog.PaymentReference,
+                                        //    TranCurrency = "NGN",
+                                        //    Accounts = new Implementation.Accounts
+                                        //    {
+                                        //        CreditAccount = _dutyConfig.VATAccount,
+                                        //        DebitAccount = _dutyConfig.TillAccount,// getPaymentLog.CustomerAccount,
+                                        //        Narration = $"VAT payment for {PaymentLog.PaymentReference}",
+                                        //        TranAmount = Convert.ToDouble(vatOnAssessment.TaxAmount)
+                                        //    }
+                                        //};
+                                       
+                                        var vatRequestBody = new PostingDetailObj
+                                        {
+                                            RequestID = PaymentLog.PaymentReference,
+                                            TranCurrency = "NGN",
+                                            SplitFee = "N",
+                                            TranRemarks = PaymentLog.PaymentReference,
+                                            TranType = "CustomDutyPayment",
+                                            Accounts = new Implementation.Accounts
+                                            {
+                                                CreditAccount = _dutyConfig.VATAccount,
+                                                DebitAccount = _dutyConfig.TillAccount,// getPaymentLog.CustomerAccount,
+                                                Narration = $"VAT payment for {PaymentLog.PaymentReference}",
+                                                TranAmount = Convert.ToDouble(vatOnAssessment.TaxAmount),
+                                                CreditBranch = "",
+                                                DebitBranch = loggedinBranchCode
+                                            }
+                                        };
+                                        var vatTransferResult = await transferService.PostTransferAsnyc(postRequestBody);
+                                        if (vatTransferResult.ResponseMessage.ToLower() == "successful")
+                                        {
+                                            successCount = 2;
+                                        }
+                                    }
+                                    // retry = 0;
+                                    counter = 0;
+                                    //ResponseReceived = (counter == 0);
+                                    //Message = paymentStatus.Message;
+
+                                    cleaner.DeleteFile(assessmentType == "Excise" ? _dutyConfig.ExciseResponsePath : @"C:\tosser\inout\eresponse");
+
+                                    Log.Information("Updation transaction status");
+                                    PaymentLog.StatusId = (int)TransactionStatus.Completed;
+                                    PaymentLog.TransactionStatusId = (int)TransactionStatus.Completed;
+                                    _context.Update(PaymentLog);
+                                    _context.SaveChanges();
+
+                                    value = transferResult;
+                                    //return Ok(new { Status = HttpStatusCode.OK, Message = $"Transaction completed: NCS Message - {paymentStatus?.Message}" });
+                                }
+                                //return null;
+                            }
+                        }
+                    }                    
+                }
+                counter = (counter == 0 ? counter : counter += 1); retry = counter;
+
+            }
+            while (retry != 0);
+            return successCount;
         }
 
 
