@@ -290,7 +290,7 @@
                   <table border="0" cellpadding="0" cellspacing="0">
                     <tr>
                       <td>
-                        <h1 style="font-size: 20px;color: #4aa497;">Custom Duty Payment</h1>
+                        <h1 style="font-size: 20px;color: #4aa497;">TEST!!! Custom Duty Payment</h1>
                         <p>Dear {Authoriser}</p>
                         <p>Please click <a href ="http://172.16.200.172:3031/dashboard/customs/approval/{AssessmentId}">here</a> to authorise pending Custom Duty payment</p>
                         <p><br>Contact us for more information at operations@tajbank.com</p>
