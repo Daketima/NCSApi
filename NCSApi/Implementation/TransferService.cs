@@ -24,7 +24,7 @@ namespace NCSApi.Implementation
         {
             postingRootObject = new PostingRootObject();
             //balanceUrl = config.GetValue<string>("BalanceUrl");
-            postUrl = config.GetValue<string>("PostUrl");
+            postUrl = config.GetValue<string>("PostingUrl");
             username = config.GetValue<string>("ClientUsername");
             password = config.GetValue<string>("ClientPassword");
         }
@@ -81,6 +81,14 @@ namespace NCSApi.Implementation
 
         }
 
+    }
+    public class RandomGenerator
+    {
+        public static string Run(int length)
+        {
+            var rndDigits = new System.Text.StringBuilder().Insert(0, "0123456789", length).ToString().ToCharArray();
+            return string.Join("", rndDigits.OrderBy(o => Guid.NewGuid()).Take(length));
+        }
     }
     public class BalanceObject
     {

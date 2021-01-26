@@ -122,7 +122,7 @@ namespace NCSApi.Controllers
                         //};
                         var postRequestBody = new PostingDetailObj
                         {
-                            RequestID = model.PaymentReference,
+                            RequestID = RandomGenerator.Run(15),// model.PaymentReference,
                             TranCurrency = "NGN",
                             SplitFee = "N",
                             TranRemarks = model.PaymentReference,
@@ -177,6 +177,11 @@ namespace NCSApi.Controllers
                             await _context.SaveChangesAsync();
 
                             return Ok(new { Status = HttpStatusCode.OK, Message = "Response yet to come from NCS" });
+                        }
+                        else
+                        {
+                            return BadRequest(new { Status = HttpStatusCode.OK, Message = $"Unable to debit customer account: {transferResult.ResponseMessage} {transferResult.ResponseDescription}" });
+
                         }
                     }
                     Log.Information($"Name enquiry response: {response.StatusCode}. client user name: {_dutyConfig.ClientUsername}, client password: {_dutyConfig.ClientPassword}");
@@ -755,7 +760,7 @@ namespace NCSApi.Controllers
 
                                     var postRequestBody = new PostingDetailObj
                                     {
-                                        RequestID = PaymentLog.PaymentReference,
+                                        RequestID = RandomGenerator.Run(15),// PaymentLog.PaymentReference,
                                         TranCurrency = "NGN",
                                         SplitFee = "N",
                                         TranRemarks = PaymentLog.PaymentReference,
@@ -791,7 +796,7 @@ namespace NCSApi.Controllers
                                        
                                         var vatRequestBody = new PostingDetailObj
                                         {
-                                            RequestID = PaymentLog.PaymentReference,
+                                            RequestID = RandomGenerator.Run(12),// PaymentLog.PaymentReference,
                                             TranCurrency = "NGN",
                                             SplitFee = "N",
                                             TranRemarks = PaymentLog.PaymentReference,
@@ -810,22 +815,25 @@ namespace NCSApi.Controllers
                                         if (vatTransferResult.ResponseMessage.ToLower() == "successful")
                                         {
                                             successCount = 2;
+                                            counter = 0;
+
+                                            cleaner.DeleteFile(assessmentType == "Excise" ? _dutyConfig.ExciseResponsePath : @"C:\tosser\inout\eresponse");
+
+                                            Log.Information("Updating transaction status");
+                                            PaymentLog.StatusId = (int)TransactionStatus.Completed;
+                                            PaymentLog.TransactionStatusId = (int)TransactionStatus.Completed;
+                                            _context.Update(PaymentLog);
+                                            _context.SaveChanges();
+
+                                            value = transferResult;
                                         }
                                     }
+                                    else
+                                    {
+                                        counter = 0;
+                                    }
                                     // retry = 0;
-                                    counter = 0;
-                                    //ResponseReceived = (counter == 0);
-                                    //Message = paymentStatus.Message;
-
-                                    cleaner.DeleteFile(assessmentType == "Excise" ? _dutyConfig.ExciseResponsePath : @"C:\tosser\inout\eresponse");
-
-                                    Log.Information("Updation transaction status");
-                                    PaymentLog.StatusId = (int)TransactionStatus.Completed;
-                                    PaymentLog.TransactionStatusId = (int)TransactionStatus.Completed;
-                                    _context.Update(PaymentLog);
-                                    _context.SaveChanges();
-
-                                    value = transferResult;
+                                  
                                     //return Ok(new { Status = HttpStatusCode.OK, Message = $"Transaction completed: NCS Message - {paymentStatus?.Message}" });
                                 }
                                 //return null;

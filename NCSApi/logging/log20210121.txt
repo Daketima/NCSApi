@@ -1,0 +1,40 @@
+2021-01-21 10:00:08.430 +01:00 [INF] Start processing HTTP request GET "http://172.16.200.172/TAJCentralAuth/api/account/getsupervisorsbybranchcode?branchCode=0001&appName=customs"
+2021-01-21 10:00:08.788 +01:00 [INF] Sending HTTP request GET "http://172.16.200.172/TAJCentralAuth/api/account/getsupervisorsbybranchcode?branchCode=0001&appName=customs"
+2021-01-21 10:00:08.932 +01:00 [INF] Received HTTP response after 138.9763ms - "OK"
+2021-01-21 10:00:08.937 +01:00 [INF] End processing HTTP request after 525.6859ms - "OK"
+2021-01-21 10:02:27.952 +01:00 [INF] Start processing HTTP request POST "http://172.16.200.172:2303/api/operation/sendemail"
+2021-01-21 10:02:27.954 +01:00 [INF] Sending HTTP request POST "http://172.16.200.172:2303/api/operation/sendemail"
+2021-01-21 10:02:36.542 +01:00 [INF] Received HTTP response after 8587.3444ms - "OK"
+2021-01-21 10:02:36.543 +01:00 [INF] End processing HTTP request after 8590.5691ms - "OK"
+2021-01-21 10:39:49.191 +01:00 [INF] Attempting Customer Name Enquiry for the account: 2092220001
+2021-01-21 10:39:51.896 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2021-01-21 10:39:51.941 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2021-01-21 10:39:55.266 +01:00 [INF] Received HTTP response after 3324.5433ms - "OK"
+2021-01-21 10:39:55.267 +01:00 [INF] End processing HTTP request after 3371.7465ms - "OK"
+2021-01-21 10:46:30.140 +01:00 [ERR] Object reference not set to an instance of an object.
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at NCSApi.Controllers.PaymentController.Get(PaymentCheckDto model)
+2021-01-21 10:46:57.248 +01:00 [INF] Attempting Customer Name Enquiry for the account: 2092220001
+2021-01-21 10:46:57.250 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2021-01-21 10:46:57.252 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2021-01-21 10:46:57.347 +01:00 [INF] Received HTTP response after 95.5044ms - "OK"
+2021-01-21 10:46:57.348 +01:00 [INF] End processing HTTP request after 97.7622ms - "OK"
+2021-01-21 10:53:26.474 +01:00 [INF] Name enquiry response: OK. client user name: developer, client password: 087f7101089b76ce079e3725276d91d1a30872ba
+2021-01-21 11:00:55.708 +01:00 [INF] Attempting Customer Name Enquiry for the account: 2092220001
+2021-01-21 11:00:55.950 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2021-01-21 11:00:55.958 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2021-01-21 11:00:56.030 +01:00 [INF] Received HTTP response after 64.7414ms - "OK"
+2021-01-21 11:00:56.035 +01:00 [INF] End processing HTTP request after 101.0579ms - "OK"
+2021-01-21 11:56:15.953 +01:00 [ERR] Object reference not set to an instance of an object.
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at NCSApi.Controllers.PaymentController.PaymentResponseFinder_(PaymentLog PaymentLog, String assessmentType, String loggedinBranchCode) in C:\Users\taj181\Documents\Visual Studio 2019\Projects\NCSApi\NCSApi\NCSApi\Controllers\PaymentController.cs:line 723
+   at NCSApi.Controllers.PaymentController.Get(PaymentCheckDto model) in C:\Users\taj181\Documents\Visual Studio 2019\Projects\NCSApi\NCSApi\NCSApi\Controllers\PaymentController.cs:line 152
+2021-01-21 12:16:47.451 +01:00 [INF] Attempting Customer Name Enquiry for the account: 2092220001
+2021-01-21 12:16:47.695 +01:00 [INF] Start processing HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2021-01-21 12:16:47.704 +01:00 [INF] Sending HTTP request POST "http://172.19.11.32:8065//api//General//IntraBankNameInquiry"
+2021-01-21 12:16:49.024 +01:00 [INF] Received HTTP response after 1309.3868ms - "OK"
+2021-01-21 12:16:49.032 +01:00 [INF] End processing HTTP request after 1351.0083ms - "OK"
+2021-01-21 12:46:32.093 +01:00 [ERR] Object reference not set to an instance of an object.
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at NCSApi.Controllers.PaymentController.PaymentResponseFinder_(PaymentLog PaymentLog, String assessmentType, String loggedinBranchCode)
+   at NCSApi.Controllers.PaymentController.Get(PaymentCheckDto model)
